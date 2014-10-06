@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      version="EE-3.5.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+    <data-mapper:config name="List_WorkerType__To_Map" transformationGraphPath="list_workertype__to_map_1.grf" doc:name="List_WorkerType__To_Map"/>  	
+	<data-mapper:config name="List_WorkerType__To_Map1" transformationGraphPath="list_workertype__to_map.grf" doc:name="List_WorkerType__To_Map"/>
+    
+    <batch:job name="createServiceNowAssets">
+        <batch:threading-profile poolExhaustedAction="WAIT"/>
+        <batch:process-records>
+            <batch:step name="CheckIfNewHire" >
+                <enricher source="payload" target="recordVars['isNewHire']" doc:name="store in recordVars['isNewHire']">
+                    <component class="org.mule.kicks.TransactionsProcessor" doc:name="Iterate through transaction logs"/>
+                </enricher>
+                <enricher source="payload" target="recordVars['isSales']" doc:name="store in recordVars['isSales']">
+                    <component class="org.mule.kicks.DepartmentProcessor" doc:name="Java"/>
+                </enricher>
+                <logger message="issales: #[recordVars['isSales']], ${snow.locationA}" level="INFO" doc:name="Logger"/>
+                <batch:set-record-variable variableName="worker" value="#[payload]" doc:name="Store worker data"/>
+            </batch:step>
+            <batch:step name="InsertRequestA" accept-expression="recordVars['isNewHire'] == true">
+                <data-mapper:transform config-ref="List_WorkerType__To_Map" doc:name="List&lt;WorkerType&gt; To Map">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="assignedTo">${snow.pc.assignedTo}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="isSales">#[recordVars['isSales']]</data-mapper:input-argument>
+                        <data-mapper:input-argument key="locationA">${snow.locationA}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="locationB">${snow.locationB}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="price">${snow.pc.price}</data-mapper:input-argument>  
+                        <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.pc.deliveryDays})]</data-mapper:input-argument>                                
+                    </data-mapper:input-arguments>
+                </data-mapper:transform>
+                <enricher source="payload" target="recordVars['request1']" doc:name="store in recordVars['request1']">
+                    <flow-ref name="insertRequestFlow" doc:name="Flow Reference"/>
+                </enricher>
+            </batch:step>
+            <batch:step name="InsertPcRequestItem" accept-expression="recordVars['isNewHire'] == true">
+                <set-payload value="#[recordVars['worker']]" doc:name="Set Payload"/>
+                <data-mapper:transform config-ref="List_WorkerType__To_Map1" doc:name="Worker to PC Request">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="catItem">${snow.pc.model}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="assignedTo">${snow.pc.assignedTo}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="request">#[recordVars['request1']['sysId']]</data-mapper:input-argument>
+
+                        <data-mapper:input-argument key="price">${snow.pc.price}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.pc.deliveryDays})]</data-mapper:input-argument>
+               
+                    </data-mapper:input-arguments>
+                </data-mapper:transform>
+                <flow-ref name="insertItemFlow" doc:name="Flow Reference"/>
+            </batch:step>
+            <batch:step name="InsertRequestB" accept-expression="recordVars['isNewHire'] == true">
+                <data-mapper:transform config-ref="List_WorkerType__To_Map" doc:name="List&lt;WorkerType&gt; To Map">
+                    <data-mapper:input-arguments>
+                        <data-mapper:input-argument key="assignedTo">${snow.desk.assignedTo}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="isSales">#[recordVars['isSales']]</data-mapper:input-argument>
+                        <data-mapper:input-argument key="locationB">${snow.locationB}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="locationA">${snow.locationA}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="price">${snow.desk.price}</data-mapper:input-argument>
+						<data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.desk.deliveryDays})]</data-mapper:input-argument>
+               
+                    </data-mapper:input-arguments>
+                </data-mapper:transform>
+                <enricher source="payload" target="recordVars['request2']" doc:name="store in recordVars['request1']">
+                    <flow-ref name="insertRequestFlow" doc:name="Flow Reference"/>
+                </enricher>
+            </batch:step>
+            <batch:step name="InsertDeskRequestItem" accept-expression="recordVars['isNewHire'] == true">
+                <set-payload value="#[recordVars['worker']]" doc:name="Set Payload"/>
+            	 <data-mapper:transform config-ref="List_WorkerType__To_Map1" doc:name="Worker to Desk Request">
+            	 	<data-mapper:input-arguments>
+                        <data-mapper:input-argument key="catItem">${snow.desk.model}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="assignedTo">${snow.desk.assignedTo}</data-mapper:input-argument>
+                        <data-mapper:input-argument key="request">#[recordVars['request2']['sysId']]</data-mapper:input-argument>
+                        <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.desk.deliveryDays})]</data-mapper:input-argument>
+
+	            	</data-mapper:input-arguments>
+            	</data-mapper:transform>
+                <flow-ref name="insertItemFlow" doc:name="Flow Reference"/>
+            </batch:step>
+        </batch:process-records>
+        <batch:on-complete>
+            <json:object-to-json-transformer doc:name="Convert Batch results to JSON"/>
+            <logger level="INFO" doc:name="Log the batch result" message="Batch completed: #[payload]"/>
+        </batch:on-complete>
+    </batch:job>
+    <sub-flow name="insertRequestFlow" doc:name="insertRequestFlow">
+        <servicenow:insert config-ref="ServiceNow" type="SC_REQUEST" doc:name="ServiceNow">
+            <servicenow:insert-request ref="#[payload]"/>
+        </servicenow:insert>
+        <logger message="request: #[payload]" level="INFO" doc:name="Log the insert response"/>
+    </sub-flow>
+    <sub-flow name="insertItemFlow" doc:name="insertItemFlow">
+        <servicenow:insert config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="ServiceNow"/>
+        <json:object-to-json-transformer doc:name="Convert InsertResponse to JSON"/>
+        <logger message="request item: #[payload]" level="INFO" doc:name="Log the insert respone"/>
+    </sub-flow>
+
+</mule>

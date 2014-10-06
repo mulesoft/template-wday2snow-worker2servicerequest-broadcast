@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?><Graph __version="3.5.0" author="Admin" created="Fri Oct 03 10:13:19 CEST 2014" description="Map To Map" guiVersion="3.4.4.P" id="1412327695656" licenseCode="Unlicensed" licenseType="Unknown" modified="Fri Oct 03 10:13:19 CEST 2014" modifiedBy="Admin" name="Map_To_Map" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Map" _dataStructure="OBJECT" _id="__id" _type="Input" id="89e41253-49cd-44ad-a0ad-450a903ae562">
+<Record fieldDelimiter="," name="Map" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __index="0" __sourcePath="{}/Map/active" containerType="SINGLE" label="active" name="active" type="boolean"/>
+<Field __index="1" __sourcePath="{}/Map/activityDue" containerType="SINGLE" label="activityDue" name="activityDue" type="string"/>
+<Field __index="2" __sourcePath="{}/Map/approval" containerType="SINGLE" label="approval" name="approval" type="string"/>
+<Field __index="3" __sourcePath="{}/Map/approvalHistory" containerType="SINGLE" label="approvalHistory" name="approvalHistory" type="string"/>
+<Field __index="4" __sourcePath="{}/Map/approvalSet" containerType="SINGLE" label="approvalSet" name="approvalSet" type="string"/>
+<Field __index="5" __sourcePath="{}/Map/assignedTo" containerType="SINGLE" label="assignedTo" name="assignedTo" type="string"/>
+<Field __index="6" __sourcePath="{}/Map/assignmentGroup" containerType="SINGLE" label="assignmentGroup" name="assignmentGroup" type="string"/>
+<Field __index="7" __sourcePath="{}/Map/backordered" containerType="SINGLE" label="backordered" name="backordered" type="boolean"/>
+<Field __index="8" __sourcePath="{}/Map/billable" containerType="SINGLE" label="billable" name="billable" type="boolean"/>
+<Field __index="9" __sourcePath="{}/Map/businessDuration" containerType="SINGLE" label="businessDuration" name="businessDuration" type="string"/>
+<Field __index="10" __sourcePath="{}/Map/calendarDuration" containerType="SINGLE" label="calendarDuration" name="calendarDuration" type="string"/>
+<Field __index="11" __sourcePath="{}/Map/catItem" containerType="SINGLE" label="catItem" name="catItem" type="string"/>
+<Field __index="12" __sourcePath="{}/Map/closeNotes" containerType="SINGLE" label="closeNotes" name="closeNotes" type="string"/>
+<Field __index="13" __sourcePath="{}/Map/closedAt" containerType="SINGLE" label="closedAt" name="closedAt" type="string"/>
+<Field __index="14" __sourcePath="{}/Map/closedBy" containerType="SINGLE" label="closedBy" name="closedBy" type="string"/>
+<Field __index="15" __sourcePath="{}/Map/cmdbCi" containerType="SINGLE" label="cmdbCi" name="cmdbCi" type="string"/>
+<Field __index="16" __sourcePath="{}/Map/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __index="17" __sourcePath="{}/Map/commentsAndWorkNotes" containerType="SINGLE" label="commentsAndWorkNotes" name="commentsAndWorkNotes" type="string"/>
+<Field __index="18" __sourcePath="{}/Map/company" containerType="SINGLE" label="company" name="company" type="string"/>
+<Field __index="19" __sourcePath="{}/Map/configurationItem" containerType="SINGLE" label="configurationItem" name="configurationItem" type="string"/>
+<Field __index="20" __sourcePath="{}/Map/contactType" containerType="SINGLE" label="contactType" name="contactType" type="string"/>
+<Field __index="21" __sourcePath="{}/Map/context" containerType="SINGLE" label="context" name="context" type="string"/>
+<Field __index="22" __sourcePath="{}/Map/correlationDisplay" containerType="SINGLE" label="correlationDisplay" name="correlationDisplay" type="string"/>
+<Field __index="23" __sourcePath="{}/Map/correlationId" containerType="SINGLE" label="correlationId" name="correlationId" type="string"/>
+<Field __index="24" __sourcePath="{}/Map/deliveryPlan" containerType="SINGLE" label="deliveryPlan" name="deliveryPlan" type="string"/>
+<Field __index="25" __sourcePath="{}/Map/deliveryTask" containerType="SINGLE" label="deliveryTask" name="deliveryTask" type="string"/>
+<Field __index="26" __sourcePath="{}/Map/description" containerType="SINGLE" label="description" name="description" type="string"/>
+<Field __index="27" __sourcePath="{}/Map/dueDate" containerType="SINGLE" label="dueDate" name="dueDate" type="string"/>
+<Field __index="28" __sourcePath="{}/Map/encodedQuery" containerType="SINGLE" label="encodedQuery" name="encodedQuery" type="string"/>
+<Field __index="29" __sourcePath="{}/Map/escalation" containerType="SINGLE" label="escalation" name="escalation" type="decimal"/>
+<Field __index="30" __sourcePath="{}/Map/estimatedDelivery" containerType="SINGLE" label="estimatedDelivery" name="estimatedDelivery" type="string"/>
+<Field __index="31" __sourcePath="{}/Map/excludeColumns" containerType="SINGLE" label="excludeColumns" name="excludeColumns" type="string"/>
+<Field __index="32" __sourcePath="{}/Map/expectedStart" containerType="SINGLE" label="expectedStart" name="expectedStart" type="string"/>
+<Field __index="33" __sourcePath="{}/Map/firstRow" containerType="SINGLE" label="firstRow" name="firstRow" type="string"/>
+<Field __index="34" __sourcePath="{}/Map/followUp" containerType="SINGLE" label="followUp" name="followUp" type="string"/>
+<Field __index="35" __sourcePath="{}/Map/groupList" containerType="SINGLE" label="groupList" name="groupList" type="string"/>
+<Field __index="36" __sourcePath="{}/Map/impact" containerType="SINGLE" label="impact" name="impact" type="decimal"/>
+<Field __index="37" __sourcePath="{}/Map/knowledge" containerType="SINGLE" label="knowledge" name="knowledge" type="boolean"/>
+<Field __index="38" __sourcePath="{}/Map/lastRow" containerType="SINGLE" label="lastRow" name="lastRow" type="string"/>
+<Field __index="39" __sourcePath="{}/Map/limit" containerType="SINGLE" label="limit" name="limit" type="string"/>
+<Field __index="40" __sourcePath="{}/Map/location" containerType="SINGLE" label="location" name="location" type="string"/>
+<Field __index="41" __sourcePath="{}/Map/madeSla" containerType="SINGLE" label="madeSla" name="madeSla" type="boolean"/>
+<Field __index="42" __sourcePath="{}/Map/number" containerType="SINGLE" label="number" name="number" type="string"/>
+<Field __index="43" __sourcePath="{}/Map/openedAt" containerType="SINGLE" label="openedAt" name="openedAt" type="string"/>
+<Field __index="44" __sourcePath="{}/Map/openedBy" containerType="SINGLE" label="openedBy" name="openedBy" type="string"/>
+<Field __index="45" __sourcePath="{}/Map/order" containerType="SINGLE" label="order" name="order" type="decimal"/>
+<Field __index="46" __sourcePath="{}/Map/orderBy" containerType="SINGLE" label="orderBy" name="orderBy" type="string"/>
+<Field __index="47" __sourcePath="{}/Map/orderByDesc" containerType="SINGLE" label="orderByDesc" name="orderByDesc" type="string"/>
+<Field __index="48" __sourcePath="{}/Map/parent" containerType="SINGLE" label="parent" name="parent" type="string"/>
+<Field __index="49" __sourcePath="{}/Map/price" containerType="SINGLE" label="price" name="price" type="string"/>
+<Field __index="50" __sourcePath="{}/Map/priority" containerType="SINGLE" label="priority" name="priority" type="decimal"/>
+<Field __index="51" __sourcePath="{}/Map/quantity" containerType="SINGLE" label="quantity" name="quantity" type="decimal"/>
+<Field __index="52" __sourcePath="{}/Map/reassignmentCount" containerType="SINGLE" label="reassignmentCount" name="reassignmentCount" type="decimal"/>
+<Field __index="53" __sourcePath="{}/Map/recurringFrequency" containerType="SINGLE" label="recurringFrequency" name="recurringFrequency" type="string"/>
+<Field __index="54" __sourcePath="{}/Map/recurringPrice" containerType="SINGLE" label="recurringPrice" name="recurringPrice" type="string"/>
+<Field __index="55" __sourcePath="{}/Map/request" containerType="SINGLE" label="request" name="request" type="string"/>
+<Field __index="56" __sourcePath="{}/Map/shortDescription" containerType="SINGLE" label="shortDescription" name="shortDescription" type="string"/>
+<Field __index="57" __sourcePath="{}/Map/slaDue" containerType="SINGLE" label="slaDue" name="slaDue" type="string"/>
+<Field __index="58" __sourcePath="{}/Map/stage" containerType="SINGLE" label="stage" name="stage" type="string"/>
+<Field __index="59" __sourcePath="{}/Map/state" containerType="SINGLE" label="state" name="state" type="decimal"/>
+<Field __index="60" __sourcePath="{}/Map/sysClassName" containerType="SINGLE" label="sysClassName" name="sysClassName" type="string"/>
+<Field __index="61" __sourcePath="{}/Map/sysCreatedBy" containerType="SINGLE" label="sysCreatedBy" name="sysCreatedBy" type="string"/>
+<Field __index="62" __sourcePath="{}/Map/sysCreatedOn" containerType="SINGLE" label="sysCreatedOn" name="sysCreatedOn" type="string"/>
+<Field __index="63" __sourcePath="{}/Map/sysDomain" containerType="SINGLE" label="sysDomain" name="sysDomain" type="string"/>
+<Field __index="64" __sourcePath="{}/Map/sysId" containerType="SINGLE" label="sysId" name="sysId" type="string"/>
+<Field __index="65" __sourcePath="{}/Map/sysModCount" containerType="SINGLE" label="sysModCount" name="sysModCount" type="decimal"/>
+<Field __index="66" __sourcePath="{}/Map/sysUpdatedBy" containerType="SINGLE" label="sysUpdatedBy" name="sysUpdatedBy" type="string"/>
+<Field __index="67" __sourcePath="{}/Map/sysUpdatedOn" containerType="SINGLE" label="sysUpdatedOn" name="sysUpdatedOn" type="string"/>
+<Field __index="68" __sourcePath="{}/Map/timeWorked" containerType="SINGLE" label="timeWorked" name="timeWorked" type="string"/>
+<Field __index="69" __sourcePath="{}/Map/uponApproval" containerType="SINGLE" label="uponApproval" name="uponApproval" type="string"/>
+<Field __index="70" __sourcePath="{}/Map/uponReject" containerType="SINGLE" label="uponReject" name="uponReject" type="string"/>
+<Field __index="71" __sourcePath="{}/Map/urgency" containerType="SINGLE" label="urgency" name="urgency" type="decimal"/>
+<Field __index="72" __sourcePath="{}/Map/useView" containerType="SINGLE" label="useView" name="useView" type="string"/>
+<Field __index="73" __sourcePath="{}/Map/userInput" containerType="SINGLE" label="userInput" name="userInput" type="string"/>
+<Field __index="74" __sourcePath="{}/Map/watchList" containerType="SINGLE" label="watchList" name="watchList" type="string"/>
+<Field __index="75" __sourcePath="{}/Map/workEnd" containerType="SINGLE" label="workEnd" name="workEnd" type="string"/>
+<Field __index="76" __sourcePath="{}/Map/workNotes" containerType="SINGLE" label="workNotes" name="workNotes" type="string"/>
+<Field __index="77" __sourcePath="{}/Map/workNotesList" containerType="SINGLE" label="workNotesList" name="workNotesList" type="string"/>
+<Field __index="78" __sourcePath="{}/Map/workStart" containerType="SINGLE" label="workStart" name="workStart" type="string"/>
+</Record>
+</Metadata>
+<Metadata __index="0" __referenceCounter="1" __sourcePath="{}/Map" _dataStructure="OBJECT" _id="__id" _type="Output" id="c68e2c9f-5832-4368-9ce1-f029b2cbe923">
+<Record fieldDelimiter="," name="Map" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __implementationClass="java.lang.Boolean" __index="34" __sourcePath="{}/Map/active" containerType="SINGLE" label="active" name="active" type="boolean"/>
+<Field __implementationClass="java.lang.String" __index="32" __sourcePath="{}/Map/activityDue" containerType="SINGLE" label="activityDue" name="activityDue" type="string"/>
+<Field __implementationClass="java.lang.String" __index="68" __sourcePath="{}/Map/approval" containerType="SINGLE" label="approval" name="approval" type="string"/>
+<Field __implementationClass="java.lang.String" __index="62" __sourcePath="{}/Map/approvalHistory" containerType="SINGLE" label="approvalHistory" name="approvalHistory" type="string"/>
+<Field __implementationClass="java.lang.String" __index="35" __sourcePath="{}/Map/approvalSet" containerType="SINGLE" label="approvalSet" name="approvalSet" type="string"/>
+<Field __implementationClass="java.lang.String" __index="6" __sourcePath="{}/Map/assignedTo" containerType="SINGLE" label="assignedTo" name="assignedTo" type="string"/>
+<Field __implementationClass="java.lang.String" __index="27" __sourcePath="{}/Map/assignmentGroup" containerType="SINGLE" label="assignmentGroup" name="assignmentGroup" type="string"/>
+<Field __implementationClass="java.lang.Boolean" __index="74" __sourcePath="{}/Map/backordered" containerType="SINGLE" label="backordered" name="backordered" type="boolean"/>
+<Field __implementationClass="java.lang.Boolean" __index="10" __sourcePath="{}/Map/billable" containerType="SINGLE" label="billable" name="billable" type="boolean"/>
+<Field __implementationClass="java.lang.String" __index="19" __sourcePath="{}/Map/businessDuration" containerType="SINGLE" label="businessDuration" name="businessDuration" type="string"/>
+<Field __implementationClass="java.lang.String" __index="12" __sourcePath="{}/Map/calendarDuration" containerType="SINGLE" label="calendarDuration" name="calendarDuration" type="string"/>
+<Field __implementationClass="java.lang.String" __index="25" __sourcePath="{}/Map/catItem" containerType="SINGLE" label="catItem" name="catItem" type="string"/>
+<Field __implementationClass="java.lang.String" __index="49" __sourcePath="{}/Map/closeNotes" containerType="SINGLE" label="closeNotes" name="closeNotes" type="string"/>
+<Field __implementationClass="java.lang.String" __index="42" __sourcePath="{}/Map/closedAt" containerType="SINGLE" label="closedAt" name="closedAt" type="string"/>
+<Field __implementationClass="java.lang.String" __index="20" __sourcePath="{}/Map/closedBy" containerType="SINGLE" label="closedBy" name="closedBy" type="string"/>
+<Field __implementationClass="java.lang.String" __index="14" __sourcePath="{}/Map/cmdbCi" containerType="SINGLE" label="cmdbCi" name="cmdbCi" type="string"/>
+<Field __implementationClass="java.lang.String" __index="77" __sourcePath="{}/Map/comments" containerType="SINGLE" label="comments" name="comments" type="string"/>
+<Field __implementationClass="java.lang.String" __index="11" __sourcePath="{}/Map/commentsAndWorkNotes" containerType="SINGLE" label="commentsAndWorkNotes" name="commentsAndWorkNotes" type="string"/>
+<Field __implementationClass="java.lang.String" __index="31" __sourcePath="{}/Map/company" containerType="SINGLE" label="company" name="company" type="string"/>
+<Field __implementationClass="java.lang.String" __index="51" __sourcePath="{}/Map/configurationItem" containerType="SINGLE" label="configurationItem" name="configurationItem" type="string"/>
+<Field __implementationClass="java.lang.String" __index="33" __sourcePath="{}/Map/contactType" containerType="SINGLE" label="contactType" name="contactType" type="string"/>
+<Field __implementationClass="java.lang.String" __index="73" __sourcePath="{}/Map/context" containerType="SINGLE" label="context" name="context" type="string"/>
+<Field __implementationClass="java.lang.String" __index="61" __sourcePath="{}/Map/correlationDisplay" containerType="SINGLE" label="correlationDisplay" name="correlationDisplay" type="string"/>
+<Field __implementationClass="java.lang.String" __index="64" __sourcePath="{}/Map/correlationId" containerType="SINGLE" label="correlationId" name="correlationId" type="string"/>
+<Field __implementationClass="java.lang.String" __index="75" __sourcePath="{}/Map/deliveryPlan" containerType="SINGLE" label="deliveryPlan" name="deliveryPlan" type="string"/>
+<Field __implementationClass="java.lang.String" __index="36" __sourcePath="{}/Map/deliveryTask" containerType="SINGLE" label="deliveryTask" name="deliveryTask" type="string"/>
+<Field __implementationClass="java.lang.String" __index="16" __sourcePath="{}/Map/description" containerType="SINGLE" label="description" name="description" type="string"/>
+<Field __implementationClass="java.lang.String" __index="58" __sourcePath="{}/Map/dueDate" containerType="SINGLE" label="dueDate" name="dueDate" type="string"/>
+<Field __implementationClass="java.lang.String" __index="41" __sourcePath="{}/Map/encodedQuery" containerType="SINGLE" label="encodedQuery" name="encodedQuery" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="76" __sourcePath="{}/Map/escalation" containerType="SINGLE" label="escalation" name="escalation" type="decimal"/>
+<Field __implementationClass="java.lang.String" __index="1" __sourcePath="{}/Map/estimatedDelivery" containerType="SINGLE" label="estimatedDelivery" name="estimatedDelivery" type="string"/>
+<Field __implementationClass="java.lang.String" __index="63" __sourcePath="{}/Map/excludeColumns" containerType="SINGLE" label="excludeColumns" name="excludeColumns" type="string"/>
+<Field __implementationClass="java.lang.String" __index="60" __sourcePath="{}/Map/expectedStart" containerType="SINGLE" label="expectedStart" name="expectedStart" type="string"/>
+<Field __implementationClass="java.lang.String" __index="0" __sourcePath="{}/Map/firstRow" containerType="SINGLE" label="firstRow" name="firstRow" type="string"/>
+<Field __implementationClass="java.lang.String" __index="69" __sourcePath="{}/Map/followUp" containerType="SINGLE" label="followUp" name="followUp" type="string"/>
+<Field __implementationClass="java.lang.String" __index="52" __sourcePath="{}/Map/groupList" containerType="SINGLE" label="groupList" name="groupList" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="8" __sourcePath="{}/Map/impact" containerType="SINGLE" label="impact" name="impact" type="decimal"/>
+<Field __implementationClass="java.lang.Boolean" __index="39" __sourcePath="{}/Map/knowledge" containerType="SINGLE" label="knowledge" name="knowledge" type="boolean"/>
+<Field __implementationClass="java.lang.String" __index="13" __sourcePath="{}/Map/lastRow" containerType="SINGLE" label="lastRow" name="lastRow" type="string"/>
+<Field __implementationClass="java.lang.String" __index="21" __sourcePath="{}/Map/limit" containerType="SINGLE" label="limit" name="limit" type="string"/>
+<Field __implementationClass="java.lang.String" __index="5" __sourcePath="{}/Map/location" containerType="SINGLE" label="location" name="location" type="string"/>
+<Field __implementationClass="java.lang.Boolean" __index="59" __sourcePath="{}/Map/madeSla" containerType="SINGLE" label="madeSla" name="madeSla" type="boolean"/>
+<Field __implementationClass="java.lang.String" __index="26" __sourcePath="{}/Map/number" containerType="SINGLE" label="number" name="number" type="string"/>
+<Field __implementationClass="java.lang.String" __index="72" __sourcePath="{}/Map/openedAt" containerType="SINGLE" label="openedAt" name="openedAt" type="string"/>
+<Field __implementationClass="java.lang.String" __index="23" __sourcePath="{}/Map/openedBy" containerType="SINGLE" label="openedBy" name="openedBy" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="54" __sourcePath="{}/Map/order" containerType="SINGLE" label="order" name="order" type="decimal"/>
+<Field __implementationClass="java.lang.String" __index="3" __sourcePath="{}/Map/orderBy" containerType="SINGLE" label="orderBy" name="orderBy" type="string"/>
+<Field __implementationClass="java.lang.String" __index="70" __sourcePath="{}/Map/orderByDesc" containerType="SINGLE" label="orderByDesc" name="orderByDesc" type="string"/>
+<Field __implementationClass="java.lang.String" __index="24" __sourcePath="{}/Map/parent" containerType="SINGLE" label="parent" name="parent" type="string"/>
+<Field __implementationClass="java.lang.String" __index="29" __sourcePath="{}/Map/price" containerType="SINGLE" label="price" name="price" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="15" __sourcePath="{}/Map/priority" containerType="SINGLE" label="priority" name="priority" type="decimal"/>
+<Field __implementationClass="java.math.BigDecimal" __index="18" __sourcePath="{}/Map/quantity" containerType="SINGLE" label="quantity" name="quantity" type="decimal"/>
+<Field __implementationClass="java.math.BigDecimal" __index="78" __sourcePath="{}/Map/reassignmentCount" containerType="SINGLE" label="reassignmentCount" name="reassignmentCount" type="decimal"/>
+<Field __implementationClass="java.lang.String" __index="71" __sourcePath="{}/Map/recurringFrequency" containerType="SINGLE" label="recurringFrequency" name="recurringFrequency" type="string"/>
+<Field __implementationClass="java.lang.String" __index="67" __sourcePath="{}/Map/recurringPrice" containerType="SINGLE" label="recurringPrice" name="recurringPrice" type="string"/>
+<Field __implementationClass="java.lang.String" __index="17" __sourcePath="{}/Map/request" containerType="SINGLE" label="request" name="request" type="string"/>
+<Field __implementationClass="java.lang.String" __index="30" __sourcePath="{}/Map/shortDescription" containerType="SINGLE" label="shortDescription" name="shortDescription" type="string"/>
+<Field __implementationClass="java.lang.String" __index="48" __sourcePath="{}/Map/slaDue" containerType="SINGLE" label="slaDue" name="slaDue" type="string"/>
+<Field __implementationClass="java.lang.String" __index="47" __sourcePath="{}/Map/stage" containerType="SINGLE" label="stage" name="stage" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="45" __sourcePath="{}/Map/state" containerType="SINGLE" label="state" name="state" type="decimal"/>
+<Field __implementationClass="java.lang.String" __index="7" __sourcePath="{}/Map/sysClassName" containerType="SINGLE" label="sysClassName" name="sysClassName" type="string"/>
+<Field __implementationClass="java.lang.String" __index="53" __sourcePath="{}/Map/sysCreatedBy" containerType="SINGLE" label="sysCreatedBy" name="sysCreatedBy" type="string"/>
+<Field __implementationClass="java.lang.String" __index="66" __sourcePath="{}/Map/sysCreatedOn" containerType="SINGLE" label="sysCreatedOn" name="sysCreatedOn" type="string"/>
+<Field __implementationClass="java.lang.String" __index="22" __sourcePath="{}/Map/sysDomain" containerType="SINGLE" label="sysDomain" name="sysDomain" type="string"/>
+<Field __implementationClass="java.lang.String" __index="28" __sourcePath="{}/Map/sysId" containerType="SINGLE" label="sysId" name="sysId" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="65" __sourcePath="{}/Map/sysModCount" containerType="SINGLE" label="sysModCount" name="sysModCount" type="decimal"/>
+<Field __implementationClass="java.lang.String" __index="57" __sourcePath="{}/Map/sysUpdatedBy" containerType="SINGLE" label="sysUpdatedBy" name="sysUpdatedBy" type="string"/>
+<Field __implementationClass="java.lang.String" __index="46" __sourcePath="{}/Map/sysUpdatedOn" containerType="SINGLE" label="sysUpdatedOn" name="sysUpdatedOn" type="string"/>
+<Field __implementationClass="java.lang.String" __index="2" __sourcePath="{}/Map/timeWorked" containerType="SINGLE" label="timeWorked" name="timeWorked" type="string"/>
+<Field __implementationClass="java.lang.String" __index="38" __sourcePath="{}/Map/uponApproval" containerType="SINGLE" label="uponApproval" name="uponApproval" type="string"/>
+<Field __implementationClass="java.lang.String" __index="43" __sourcePath="{}/Map/uponReject" containerType="SINGLE" label="uponReject" name="uponReject" type="string"/>
+<Field __implementationClass="java.math.BigDecimal" __index="9" __sourcePath="{}/Map/urgency" containerType="SINGLE" label="urgency" name="urgency" type="decimal"/>
+<Field __implementationClass="java.lang.String" __index="40" __sourcePath="{}/Map/useView" containerType="SINGLE" label="useView" name="useView" type="string"/>
+<Field __implementationClass="java.lang.String" __index="55" __sourcePath="{}/Map/userInput" containerType="SINGLE" label="userInput" name="userInput" type="string"/>
+<Field __implementationClass="java.lang.String" __index="44" __sourcePath="{}/Map/watchList" containerType="SINGLE" label="watchList" name="watchList" type="string"/>
+<Field __implementationClass="java.lang.String" __index="37" __sourcePath="{}/Map/workEnd" containerType="SINGLE" label="workEnd" name="workEnd" type="string"/>
+<Field __implementationClass="java.lang.String" __index="4" __sourcePath="{}/Map/workNotes" containerType="SINGLE" label="workNotes" name="workNotes" type="string"/>
+<Field __implementationClass="java.lang.String" __index="56" __sourcePath="{}/Map/workNotesList" containerType="SINGLE" label="workNotesList" name="workNotesList" type="string"/>
+<Field __implementationClass="java.lang.String" __index="50" __sourcePath="{}/Map/workStart" containerType="SINGLE" label="workStart" name="workStart" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiName="Map&lt;k,v&gt; READER" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="active" trim="true" xpath="active"/>
+  <Mapping cloverField="activityDue" trim="true" xpath="activityDue"/>
+  <Mapping cloverField="approval" trim="true" xpath="approval"/>
+  <Mapping cloverField="approvalHistory" trim="true" xpath="approvalHistory"/>
+  <Mapping cloverField="approvalSet" trim="true" xpath="approvalSet"/>
+  <Mapping cloverField="assignedTo" trim="true" xpath="assignedTo"/>
+  <Mapping cloverField="assignmentGroup" trim="true" xpath="assignmentGroup"/>
+  <Mapping cloverField="backordered" trim="true" xpath="backordered"/>
+  <Mapping cloverField="billable" trim="true" xpath="billable"/>
+  <Mapping cloverField="businessDuration" trim="true" xpath="businessDuration"/>
+  <Mapping cloverField="calendarDuration" trim="true" xpath="calendarDuration"/>
+  <Mapping cloverField="catItem" trim="true" xpath="catItem"/>
+  <Mapping cloverField="closeNotes" trim="true" xpath="closeNotes"/>
+  <Mapping cloverField="closedAt" trim="true" xpath="closedAt"/>
+  <Mapping cloverField="closedBy" trim="true" xpath="closedBy"/>
+  <Mapping cloverField="cmdbCi" trim="true" xpath="cmdbCi"/>
+  <Mapping cloverField="comments" trim="true" xpath="comments"/>
+  <Mapping cloverField="commentsAndWorkNotes" trim="true" xpath="commentsAndWorkNotes"/>
+  <Mapping cloverField="company" trim="true" xpath="company"/>
+  <Mapping cloverField="configurationItem" trim="true" xpath="configurationItem"/>
+  <Mapping cloverField="contactType" trim="true" xpath="contactType"/>
+  <Mapping cloverField="context" trim="true" xpath="context"/>
+  <Mapping cloverField="correlationDisplay" trim="true" xpath="correlationDisplay"/>
+  <Mapping cloverField="correlationId" trim="true" xpath="correlationId"/>
+  <Mapping cloverField="deliveryPlan" trim="true" xpath="deliveryPlan"/>
+  <Mapping cloverField="deliveryTask" trim="true" xpath="deliveryTask"/>
+  <Mapping cloverField="description" trim="true" xpath="description"/>
+  <Mapping cloverField="dueDate" trim="true" xpath="dueDate"/>
+  <Mapping cloverField="encodedQuery" trim="true" xpath="encodedQuery"/>
+  <Mapping cloverField="escalation" trim="true" xpath="escalation"/>
+  <Mapping cloverField="estimatedDelivery" trim="true" xpath="estimatedDelivery"/>
+  <Mapping cloverField="excludeColumns" trim="true" xpath="excludeColumns"/>
+  <Mapping cloverField="expectedStart" trim="true" xpath="expectedStart"/>
+  <Mapping cloverField="firstRow" trim="true" xpath="firstRow"/>
+  <Mapping cloverField="followUp" trim="true" xpath="followUp"/>
+  <Mapping cloverField="groupList" trim="true" xpath="groupList"/>
+  <Mapping cloverField="impact" trim="true" xpath="impact"/>
+  <Mapping cloverField="knowledge" trim="true" xpath="knowledge"/>
+  <Mapping cloverField="lastRow" trim="true" xpath="lastRow"/>
+  <Mapping cloverField="limit" trim="true" xpath="limit"/>
+  <Mapping cloverField="location" trim="true" xpath="location"/>
+  <Mapping cloverField="madeSla" trim="true" xpath="madeSla"/>
+  <Mapping cloverField="number" trim="true" xpath="number"/>
+  <Mapping cloverField="openedAt" trim="true" xpath="openedAt"/>
+  <Mapping cloverField="openedBy" trim="true" xpath="openedBy"/>
+  <Mapping cloverField="order" trim="true" xpath="order"/>
+  <Mapping cloverField="orderBy" trim="true" xpath="orderBy"/>
+  <Mapping cloverField="orderByDesc" trim="true" xpath="orderByDesc"/>
+  <Mapping cloverField="parent" trim="true" xpath="parent"/>
+  <Mapping cloverField="price" trim="true" xpath="price"/>
+  <Mapping cloverField="priority" trim="true" xpath="priority"/>
+  <Mapping cloverField="quantity" trim="true" xpath="quantity"/>
+  <Mapping cloverField="reassignmentCount" trim="true" xpath="reassignmentCount"/>
+  <Mapping cloverField="recurringFrequency" trim="true" xpath="recurringFrequency"/>
+  <Mapping cloverField="recurringPrice" trim="true" xpath="recurringPrice"/>
+  <Mapping cloverField="request" trim="true" xpath="request"/>
+  <Mapping cloverField="shortDescription" trim="true" xpath="shortDescription"/>
+  <Mapping cloverField="slaDue" trim="true" xpath="slaDue"/>
+  <Mapping cloverField="stage" trim="true" xpath="stage"/>
+  <Mapping cloverField="state" trim="true" xpath="state"/>
+  <Mapping cloverField="sysClassName" trim="true" xpath="sysClassName"/>
+  <Mapping cloverField="sysCreatedBy" trim="true" xpath="sysCreatedBy"/>
+  <Mapping cloverField="sysCreatedOn" trim="true" xpath="sysCreatedOn"/>
+  <Mapping cloverField="sysDomain" trim="true" xpath="sysDomain"/>
+  <Mapping cloverField="sysId" trim="true" xpath="sysId"/>
+  <Mapping cloverField="sysModCount" trim="true" xpath="sysModCount"/>
+  <Mapping cloverField="sysUpdatedBy" trim="true" xpath="sysUpdatedBy"/>
+  <Mapping cloverField="sysUpdatedOn" trim="true" xpath="sysUpdatedOn"/>
+  <Mapping cloverField="timeWorked" trim="true" xpath="timeWorked"/>
+  <Mapping cloverField="uponApproval" trim="true" xpath="uponApproval"/>
+  <Mapping cloverField="uponReject" trim="true" xpath="uponReject"/>
+  <Mapping cloverField="urgency" trim="true" xpath="urgency"/>
+  <Mapping cloverField="useView" trim="true" xpath="useView"/>
+  <Mapping cloverField="userInput" trim="true" xpath="userInput"/>
+  <Mapping cloverField="watchList" trim="true" xpath="watchList"/>
+  <Mapping cloverField="workEnd" trim="true" xpath="workEnd"/>
+  <Mapping cloverField="workNotes" trim="true" xpath="workNotes"/>
+  <Mapping cloverField="workNotesList" trim="true" xpath="workNotesList"/>
+  <Mapping cloverField="workStart" trim="true" xpath="workStart"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[MAP]]></attr>
+</Node>
+<Node enabled="enabled" guiName="Foreach 'Map' -&gt; 'Map'" guiX="460" guiY="20" id="FOREACH_MAP_MAP" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.active = input.active;
+output.activityDue = input.activityDue;
+output.approval = input.approval;
+output.approvalHistory = input.approvalHistory;
+output.approvalSet = input.approvalSet;
+output.assignedTo = input.assignedTo;
+output.assignmentGroup = input.assignmentGroup;
+output.backordered = input.backordered;
+output.billable = input.billable;
+output.businessDuration = input.businessDuration;
+output.calendarDuration = input.calendarDuration;
+output.catItem = input.catItem;
+output.closeNotes = input.closeNotes;
+output.closedAt = input.closedAt;
+output.closedBy = input.closedBy;
+output.cmdbCi = input.cmdbCi;
+output.comments = input.comments;
+output.commentsAndWorkNotes = input.commentsAndWorkNotes;
+output.company = input.company;
+output.configurationItem = input.configurationItem;
+output.contactType = input.contactType;
+output.context = input.context;
+output.correlationDisplay = input.correlationDisplay;
+output.correlationId = input.correlationId;
+output.deliveryPlan = input.deliveryPlan;
+output.deliveryTask = input.deliveryTask;
+output.description = input.description;
+output.dueDate = input.dueDate;
+output.encodedQuery = input.encodedQuery;
+output.escalation = input.escalation;
+output.estimatedDelivery = input.estimatedDelivery;
+output.excludeColumns = input.excludeColumns;
+output.expectedStart = input.expectedStart;
+output.firstRow = input.firstRow;
+output.followUp = input.followUp;
+output.groupList = input.groupList;
+output.impact = input.impact;
+output.knowledge = input.knowledge;
+output.lastRow = input.lastRow;
+output.limit = input.limit;
+output.location = input.location;
+output.madeSla = input.madeSla;
+output.number = input.number;
+output.openedAt = input.openedAt;
+output.openedBy = input.openedBy;
+output.order = input.order;
+output.orderBy = input.orderBy;
+output.orderByDesc = input.orderByDesc;
+output.parent = input.parent;
+output.price = input.price;
+output.priority = input.priority;
+output.quantity = input.quantity;
+output.reassignmentCount = input.reassignmentCount;
+output.recurringFrequency = input.recurringFrequency;
+output.recurringPrice = input.recurringPrice;
+output.request = input.request;
+output.shortDescription = input.shortDescription;
+output.slaDue = input.slaDue;
+output.stage = input.stage;
+output.state = input.state;
+output.sysClassName = input.sysClassName;
+output.sysCreatedBy = input.sysCreatedBy;
+output.sysCreatedOn = input.sysCreatedOn;
+output.sysDomain = input.sysDomain;
+output.sysId = input.sysId;
+output.sysModCount = input.sysModCount;
+output.sysUpdatedBy = input.sysUpdatedBy;
+output.sysUpdatedOn = input.sysUpdatedOn;
+output.timeWorked = input.timeWorked;
+output.uponApproval = input.uponApproval;
+output.uponReject = input.uponReject;
+output.urgency = input.urgency;
+output.useView = input.useView;
+output.userInput = input.userInput;
+output.watchList = input.watchList;
+output.workEnd = input.workEnd;
+output.workNotes = input.workNotes;
+output.workNotesList = input.workNotesList;
+output.workStart = input.workStart;
+]]></attr>
+</Node>
+<Node cacheInMemory="true" enabled="enabled" fileURL="dict:outputPayload" guiName="Map&lt;k,v&gt; WRITER" guiX="900" guiY="20" id="MAP_WRITER0" type="MAP_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<Map xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <firstRow clover:dataType="java.lang.String">$0.firstRow</firstRow>
+  <estimatedDelivery clover:dataType="java.lang.String">$0.estimatedDelivery</estimatedDelivery>
+  <timeWorked clover:dataType="java.lang.String">$0.timeWorked</timeWorked>
+  <orderBy clover:dataType="java.lang.String">$0.orderBy</orderBy>
+  <workNotes clover:dataType="java.lang.String">$0.workNotes</workNotes>
+  <location clover:dataType="java.lang.String">$0.location</location>
+  <assignedTo clover:dataType="java.lang.String">$0.assignedTo</assignedTo>
+  <sysClassName clover:dataType="java.lang.String">$0.sysClassName</sysClassName>
+  <impact clover:dataType="java.math.BigDecimal">$0.impact</impact>
+  <urgency clover:dataType="java.math.BigDecimal">$0.urgency</urgency>
+  <billable clover:dataType="java.lang.Boolean">$0.billable</billable>
+  <commentsAndWorkNotes clover:dataType="java.lang.String">$0.commentsAndWorkNotes</commentsAndWorkNotes>
+  <calendarDuration clover:dataType="java.lang.String">$0.calendarDuration</calendarDuration>
+  <lastRow clover:dataType="java.lang.String">$0.lastRow</lastRow>
+  <cmdbCi clover:dataType="java.lang.String">$0.cmdbCi</cmdbCi>
+  <priority clover:dataType="java.math.BigDecimal">$0.priority</priority>
+  <description clover:dataType="java.lang.String">$0.description</description>
+  <request clover:dataType="java.lang.String">$0.request</request>
+  <quantity clover:dataType="java.math.BigDecimal">$0.quantity</quantity>
+  <businessDuration clover:dataType="java.lang.String">$0.businessDuration</businessDuration>
+  <closedBy clover:dataType="java.lang.String">$0.closedBy</closedBy>
+  <limit clover:dataType="java.lang.String">$0.limit</limit>
+  <sysDomain clover:dataType="java.lang.String">$0.sysDomain</sysDomain>
+  <openedBy clover:dataType="java.lang.String">$0.openedBy</openedBy>
+  <parent clover:dataType="java.lang.String">$0.parent</parent>
+  <catItem clover:dataType="java.lang.String">$0.catItem</catItem>
+  <number clover:dataType="java.lang.String">$0.number</number>
+  <assignmentGroup clover:dataType="java.lang.String">$0.assignmentGroup</assignmentGroup>
+  <sysId clover:dataType="java.lang.String">$0.sysId</sysId>
+  <price clover:dataType="java.lang.String">$0.price</price>
+  <shortDescription clover:dataType="java.lang.String">$0.shortDescription</shortDescription>
+  <company clover:dataType="java.lang.String">$0.company</company>
+  <activityDue clover:dataType="java.lang.String">$0.activityDue</activityDue>
+  <contactType clover:dataType="java.lang.String">$0.contactType</contactType>
+  <active clover:dataType="java.lang.Boolean">$0.active</active>
+  <approvalSet clover:dataType="java.lang.String">$0.approvalSet</approvalSet>
+  <deliveryTask clover:dataType="java.lang.String">$0.deliveryTask</deliveryTask>
+  <workEnd clover:dataType="java.lang.String">$0.workEnd</workEnd>
+  <uponApproval clover:dataType="java.lang.String">$0.uponApproval</uponApproval>
+  <knowledge clover:dataType="java.lang.Boolean">$0.knowledge</knowledge>
+  <useView clover:dataType="java.lang.String">$0.useView</useView>
+  <encodedQuery clover:dataType="java.lang.String">$0.encodedQuery</encodedQuery>
+  <closedAt clover:dataType="java.lang.String">$0.closedAt</closedAt>
+  <uponReject clover:dataType="java.lang.String">$0.uponReject</uponReject>
+  <watchList clover:dataType="java.lang.String">$0.watchList</watchList>
+  <state clover:dataType="java.math.BigDecimal">$0.state</state>
+  <sysUpdatedOn clover:dataType="java.lang.String">$0.sysUpdatedOn</sysUpdatedOn>
+  <stage clover:dataType="java.lang.String">$0.stage</stage>
+  <slaDue clover:dataType="java.lang.String">$0.slaDue</slaDue>
+  <closeNotes clover:dataType="java.lang.String">$0.closeNotes</closeNotes>
+  <workStart clover:dataType="java.lang.String">$0.workStart</workStart>
+  <configurationItem clover:dataType="java.lang.String">$0.configurationItem</configurationItem>
+  <groupList clover:dataType="java.lang.String">$0.groupList</groupList>
+  <sysCreatedBy clover:dataType="java.lang.String">$0.sysCreatedBy</sysCreatedBy>
+  <order clover:dataType="java.math.BigDecimal">$0.order</order>
+  <userInput clover:dataType="java.lang.String">$0.userInput</userInput>
+  <workNotesList clover:dataType="java.lang.String">$0.workNotesList</workNotesList>
+  <sysUpdatedBy clover:dataType="java.lang.String">$0.sysUpdatedBy</sysUpdatedBy>
+  <dueDate clover:dataType="java.lang.String">$0.dueDate</dueDate>
+  <madeSla clover:dataType="java.lang.Boolean">$0.madeSla</madeSla>
+  <expectedStart clover:dataType="java.lang.String">$0.expectedStart</expectedStart>
+  <correlationDisplay clover:dataType="java.lang.String">$0.correlationDisplay</correlationDisplay>
+  <approvalHistory clover:dataType="java.lang.String">$0.approvalHistory</approvalHistory>
+  <excludeColumns clover:dataType="java.lang.String">$0.excludeColumns</excludeColumns>
+  <correlationId clover:dataType="java.lang.String">$0.correlationId</correlationId>
+  <sysModCount clover:dataType="java.math.BigDecimal">$0.sysModCount</sysModCount>
+  <sysCreatedOn clover:dataType="java.lang.String">$0.sysCreatedOn</sysCreatedOn>
+  <recurringPrice clover:dataType="java.lang.String">$0.recurringPrice</recurringPrice>
+  <approval clover:dataType="java.lang.String">$0.approval</approval>
+  <followUp clover:dataType="java.lang.String">$0.followUp</followUp>
+  <orderByDesc clover:dataType="java.lang.String">$0.orderByDesc</orderByDesc>
+  <recurringFrequency clover:dataType="java.lang.String">$0.recurringFrequency</recurringFrequency>
+  <openedAt clover:dataType="java.lang.String">$0.openedAt</openedAt>
+  <context clover:dataType="java.lang.String">$0.context</context>
+  <backordered clover:dataType="java.lang.Boolean">$0.backordered</backordered>
+  <deliveryPlan clover:dataType="java.lang.String">$0.deliveryPlan</deliveryPlan>
+  <escalation clover:dataType="java.math.BigDecimal">$0.escalation</escalation>
+  <comments clover:dataType="java.lang.String">$0.comments</comments>
+  <reassignmentCount clover:dataType="java.math.BigDecimal">$0.reassignmentCount</reassignmentCount>
+</Map>]]></attr>
+<attr name="__typeName"><![CDATA[SC_REQ_ITEM]]></attr>
+<attr name="_data_format"><![CDATA[MAP]]></attr>
+<attr name="__operationName"><![CDATA[http://www.mulesoft.org/schema/mule/servicenow/get-records]]></attr>
+<attr name="__connectorName"><![CDATA[ServiceNow]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="89e41253-49cd-44ad-a0ad-450a903ae562" outPort="Port 0 (out)" toNode="FOREACH_MAP_MAP:0"/>
+<Edge debugMode="true" fromNode="FOREACH_MAP_MAP:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="c68e2c9f-5832-4368-9ce1-f029b2cbe923" outPort="Port 0 (out)" toNode="MAP_WRITER0:0"/>
+</Phase>
+</Graph>
