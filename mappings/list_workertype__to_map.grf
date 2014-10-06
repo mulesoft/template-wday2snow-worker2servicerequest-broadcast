@@ -7128,14 +7128,15 @@
 <Dictionary>
 <Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
 <Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
-<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry2" input="true" name="catItem" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry10" input="true" name="price" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry2" input="true" name="price" output="false" type="string"/>
 <Entry dictval.__javaType="java.lang.String" id="DictionaryEntry3" input="true" name="catItem" output="false" type="string"/>
-<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry4" input="true" name="assignedTo" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry4" input="true" name="catItem" output="false" type="string"/>
 <Entry dictval.__javaType="java.lang.String" id="DictionaryEntry5" input="true" name="assignedTo" output="false" type="string"/>
-<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry6" input="true" name="request" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry6" input="true" name="assignedTo" output="false" type="string"/>
 <Entry dictval.__javaType="java.lang.String" id="DictionaryEntry7" input="true" name="request" output="false" type="string"/>
-<Entry dictval.__javaType="java.lang.Integer" id="DictionaryEntry8" input="true" name="deliveryDays" output="false" type="integer"/>
-<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry9" input="true" name="price" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.String" id="DictionaryEntry8" input="true" name="request" output="false" type="string"/>
+<Entry dictval.__javaType="java.lang.Integer" id="DictionaryEntry9" input="true" name="deliveryDays" output="false" type="integer"/>
 </Dictionary>
 </Global>
 <Phase number="0">
@@ -10957,6 +10958,7 @@
 output.__id = input.__id;
 //END -> DO NOT REMOVE
 output.active = input.active;
+output.approval = "requested";
 output.catItem = inputArguments.catItem;
 output.approvalSet = inputArguments.assignedTo;
 output.request = inputArguments.request;

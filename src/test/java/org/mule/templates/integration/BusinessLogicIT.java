@@ -100,7 +100,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 
     @After
     public void tearDown() throws MuleException, Exception {
-//    	deleteTestDataFromSandBox();
+    	deleteTestDataFromSandBox();
     }
     
     private void registerListeners() throws NotificationException {

@@ -84,6 +84,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                         <data-mapper:input-argument key="assignedTo">${snow.desk.assignedTo}</data-mapper:input-argument>
                         <data-mapper:input-argument key="request">#[recordVars['request2']['sysId']]</data-mapper:input-argument>
                         <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.desk.deliveryDays})]</data-mapper:input-argument>
+                        <data-mapper:input-argument key="price">${snow.desk.price}</data-mapper:input-argument>
 
 	            	</data-mapper:input-arguments>
             	</data-mapper:transform>
