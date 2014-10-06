@@ -30,7 +30,7 @@ When a new employee is created, create 2 service requests
 1. One service request for setting up a desk
 2. one service request for setting up a computer
 
-if the department is sales, put make the request for Building A, if the department is anything else make their seat building B.	
+If the department is sales, put make the request for Building A, if the department is anything else make their seat building B.	
 
 The data is processed as follows:
 1. Workday is polled in intervals for new modifications of employees
@@ -132,6 +132,12 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + snow.pc.model `e212a942c0a80165008313c59764eea1`
 + snow.locationA `30fffb993790200044e0bfc8bcbe5dcc`
 + snow.locationB `8228cda2ac1d55eb7029baf443945c37`
+
++ snow.pc.deliveryDays `5`
++ snow.pc.price `3000`
+
++ snow.desk.deliveryDays `3`
++ snow.desk.price` 500`
 
 # API Calls <a name="apicalls"/>
 There are no special considerations regarding API calls.
