@@ -16,10 +16,6 @@ http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mu
     
     <data-mapper:config name="pojo_to_hireemployeerequesttype" transformationGraphPath="pojo_to_hireemployeerequesttype.grf" doc:name="DataMapper"/>
     <data-mapper:config name="EmployeeType_To_TerminateEmployeeRequestType" transformationGraphPath="employeetype_to_terminateemployeerequesttype.grf" doc:name="DataMapper"/>
-    <data-mapper:config name="Map_To_Map1" transformationGraphPath="map_to_map.grf" doc:name="Map_To_Map"/>
-    <data-mapper:config name="Map_To_Map2" transformationGraphPath="map_to_map_4.grf" doc:name="Map_To_Map"/>
-    <data-mapper:config name="Map_To_Map_1" transformationGraphPath="map_to_map_5.grf" doc:name="Map_To_Map_1"/>
-    <data-mapper:config name="Map_To_Map_1Map_To_Map_2" transformationGraphPath="map_to_map_6.grf" doc:name="Map_To_Map_1Map_To_Map_2"/>
     
     <sub-flow name="hireEmployee" doc:name="hireEmployee">
         <data-mapper:transform config-ref="pojo_to_hireemployeerequesttype" doc:name="Jobvite To HireEmployeeRequestType" />
@@ -27,26 +23,34 @@ http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mu
                     
     </sub-flow>
     <sub-flow name="deleteRequests" doc:name="deleteRequests">
-        <data-mapper:transform config-ref="Map_To_Map_1" doc:name="Map To Map"/>
-        <servicenow:delete-multiple config-ref="ServiceNow" type="SC_REQUEST" doc:name="ServiceNow"/>
+        <servicenow:delete-multiple config-ref="ServiceNow" type="SC_REQUEST" doc:name="ServiceNow">
+            <servicenow:delete-multiple-request>
+                <servicenow:delete-multiple-request key="sysId">#[payload]</servicenow:delete-multiple-request>
+            </servicenow:delete-multiple-request>
+        </servicenow:delete-multiple>
     </sub-flow>
     <sub-flow name="deleteReqItems" doc:name="deleteReqItems">
-        <data-mapper:transform config-ref="Map_To_Map_1Map_To_Map_2" doc:name="Map To Map"/>
-        <servicenow:delete-multiple config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="ServiceNow"/>
+        <servicenow:delete-multiple config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="ServiceNow">
+            <servicenow:delete-multiple-request>
+                <servicenow:delete-multiple-request key="parent">#[payload]</servicenow:delete-multiple-request>
+            </servicenow:delete-multiple-request>
+        </servicenow:delete-multiple>
     </sub-flow>
     <sub-flow name="getSnowReqItems" doc:name="getSnowReqItems">
-        <data-mapper:transform config-ref="Map_To_Map2" doc:name="Map To Map"/>
         <servicenow:get-records config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="ServiceNow">
-            <servicenow:get-records-request ref="#[payload]"/>
+            <servicenow:get-records-request >
+                <servicenow:get-records-request key="parent">#[payload]</servicenow:get-records-request>
+            </servicenow:get-records-request>
         </servicenow:get-records>
     </sub-flow>
     <sub-flow name="getWorkdayEmployee" doc:name="getWorkdayEmployee">
         <wd-hr:get-employee config-ref="Workday_Human_Resource" doc:name="Workday Human Resource"/>
     </sub-flow>
     <sub-flow name="getSnowRequests" doc:name="getSnowRequests">
-        <data-mapper:transform config-ref="Map_To_Map1" doc:name="Map To Map"/>
         <servicenow:get-records config-ref="ServiceNow" type="SC_REQUEST" doc:name="ServiceNow">
-            <servicenow:get-records-request ref="#[payload]"/>
+            <servicenow:get-records-request >
+                <servicenow:get-records-request key="assignedTo">#[payload]</servicenow:get-records-request>
+            </servicenow:get-records-request>
         </servicenow:get-records>
     </sub-flow>
     

@@ -34,7 +34,6 @@ import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.templates.utils.Employee;
 
 import com.mulesoft.module.batch.BatchTestHelper;
-import com.servicenow.screqitem.DeleteRecord;
 import com.servicenow.screquest.GetRecordsResponse;
 import com.servicenow.screquest.GetRecordsResponse.GetRecordsResult;
 import com.workday.hr.EmployeeGetType;
@@ -145,7 +144,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		logger.info("starting date: " + sdf.format(startingDate));
 		inputMap.put("assignedTo", DESK_ASSIGNED_TO);
 		
-		MuleEvent response = flow.process(getTestEvent(inputMap, MessageExchangePattern.REQUEST_RESPONSE));
+		MuleEvent response = flow.process(getTestEvent(DESK_ASSIGNED_TO, MessageExchangePattern.REQUEST_RESPONSE));
 		GetRecordsResponse snowRes = ((GetRecordsResponse)response.getMessage().getPayload());
 		logger.info("snow requests: " + snowRes.getGetRecordsResult().size());
 		
@@ -169,11 +168,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     
     private List<com.servicenow.screqitem.GetRecordsResponse.GetRecordsResult> getReqItem(String parentId) throws MuleException, Exception{
     	SubflowInterceptingChainLifecycleWrapper flow = getSubFlow("getSnowReqItems");
-		flow.initialise();
-		Map<String, String> inputMap = new HashMap<String, String>();
-		inputMap.put("parent", parentId);
-		
-		MuleEvent response = flow.process(getTestEvent(inputMap, MessageExchangePattern.REQUEST_RESPONSE));
+		flow.initialise();		
+		MuleEvent response = flow.process(getTestEvent(parentId, MessageExchangePattern.REQUEST_RESPONSE));
 		com.servicenow.screqitem.GetRecordsResponse snowRes = ((com.servicenow.screqitem.GetRecordsResponse)response.getMessage().getPayload());
 		
 		return snowRes.getGetRecordsResult();
@@ -182,22 +178,16 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     private void deleteTestDataFromSandBox() throws MuleException, Exception {
     	logger.info("deleting test data...");
 		
-    	DeleteRecord delete = new DeleteRecord();
     	SubflowInterceptingChainLifecycleWrapper flow = getSubFlow("deleteRequests");
 		flow.initialise();
 		SubflowInterceptingChainLifecycleWrapper flow1 = getSubFlow("deleteReqItems");
 		flow1.initialise();
-		Map<String, String> inputMap = new HashMap<String, String>();
 		
-		for (String id : snowReqIds){
-			inputMap.put("parent", id);
-			flow1.process(getTestEvent(inputMap));
-			delete.setSysId(id);
-			flow.process(getTestEvent(delete));		
-			
+		for (String id : snowReqIds){			
+			flow1.process(getTestEvent(id));			
+			flow.process(getTestEvent(id));					
 		}
-		
-		
+				
     	// Delete the created users in Workday
 		flow = getSubFlow("getWorkdaytoTerminateFlow");
 		flow.initialise();
