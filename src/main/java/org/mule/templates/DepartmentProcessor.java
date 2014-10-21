@@ -1,4 +1,4 @@
-package org.mule.kicks;
+package org.mule.templates;
 
 import org.mule.api.MuleEventContext;
 import org.mule.api.lifecycle.Callable;

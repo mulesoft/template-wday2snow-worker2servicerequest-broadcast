@@ -22,10 +22,10 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <batch:process-records>
             <batch:step name="CheckIfNewHire" >
                 <enricher source="payload" target="recordVars['isNewHire']" doc:name="store in recordVars['isNewHire']">
-                    <component class="org.mule.kicks.TransactionsProcessor" doc:name="Iterate through transaction logs"/>
+                    <component class="org.mule.templates.TransactionsProcessor" doc:name="Iterate through transaction logs"/>
                 </enricher>
                 <enricher source="payload" target="recordVars['isSales']" doc:name="store in recordVars['isSales']">
-                    <component class="org.mule.kicks.DepartmentProcessor" doc:name="Java"/>
+                    <component class="org.mule.templates.DepartmentProcessor" doc:name="Check for sales organization"/>
                 </enricher>
                 <batch:set-record-variable variableName="worker" value="#[payload]" doc:name="Store worker data"/>
             </batch:step>
@@ -41,7 +41,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                     </data-mapper:input-arguments>
                 </data-mapper:transform>
                 <enricher source="payload" target="recordVars['request1']" doc:name="store in recordVars['request1']">
-                    <flow-ref name="insertRequestFlow" doc:name="Flow Reference"/>
+                    <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
                 </enricher>
             </batch:step>
             <batch:step name="InsertPcRequestItem" accept-expression="recordVars['isNewHire'] == true">
@@ -57,7 +57,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                
                     </data-mapper:input-arguments>
                 </data-mapper:transform>
-                <flow-ref name="insertItemFlow" doc:name="Flow Reference"/>
+                <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
             </batch:step>
             <batch:step name="InsertRequestB" accept-expression="recordVars['isNewHire'] == true">
                 <data-mapper:transform config-ref="List_WorkerType__To_Map" doc:name="List&lt;WorkerType&gt; To Map">
@@ -72,7 +72,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                     </data-mapper:input-arguments>
                 </data-mapper:transform>
                 <enricher source="payload" target="recordVars['request2']" doc:name="store in recordVars['request1']">
-                    <flow-ref name="insertRequestFlow" doc:name="Flow Reference"/>
+                    <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
                 </enricher>
             </batch:step>
             <batch:step name="InsertDeskRequestItem" accept-expression="recordVars['isNewHire'] == true">
@@ -87,7 +87,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 
 	            	</data-mapper:input-arguments>
             	</data-mapper:transform>
-                <flow-ref name="insertItemFlow" doc:name="Flow Reference"/>
+                <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
             </batch:step>
         </batch:process-records>
         <batch:on-complete>
