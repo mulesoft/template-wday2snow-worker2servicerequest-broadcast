@@ -33,6 +33,7 @@ import org.mule.context.notification.NotificationException;
 import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.templates.utils.Employee;
 
+import com.mulesoft.module.batch.BatchTestHelper;
 import com.servicenow.servicecatalog.screqitem.GetRecordsResponse.GetRecordsResult;
 import com.servicenow.servicecatalog.screquest.GetRecordsResponse;
 import com.workday.hr.EmployeeGetType;
