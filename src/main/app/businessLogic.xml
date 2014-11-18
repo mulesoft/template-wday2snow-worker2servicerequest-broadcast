@@ -25,7 +25,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                 <enricher source="payload" target="recordVars['isSales']" doc:name="store in recordVars['isSales']">
                     <component class="org.mule.templates.DepartmentProcessor" doc:name="Check for sales organization"/>
                 </enricher>
-                <batch:set-record-variable variableName="worker" value="#[payload]" doc:name="Store worker data"/>
             </batch:step>
             <batch:step name="InsertRequestA" accept-expression="recordVars['isNewHire'] == true">
                 <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
