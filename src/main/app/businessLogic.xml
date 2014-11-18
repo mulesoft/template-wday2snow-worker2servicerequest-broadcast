@@ -33,7 +33,7 @@ output['approval'] = "Requested";
 output['active'] = true;
 output['assignedTo'] = '${snow.pc.assignedTo}';
 output['location'] = recordVars['isSales'] ? '${snow.locationA}' : '${snow.locationB}';
-output['price'] = Double.parseDouble('${snow.pc.price}');
+output['price'] = new BigDecimal('${snow.pc.price}');
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
 payload = output;]]></expression-component>
@@ -51,7 +51,7 @@ output['request'] = recordVars['request1']['sysId'];
 output['parent'] = recordVars['request1']['sysId'];
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
-output['price'] = Double.parseDouble(${snow.pc.price});
+output['price'] = ${snow.pc.price};
 payload = output;]]></expression-component>
 
                 <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
@@ -62,7 +62,7 @@ output['approval'] = "Requested";
 output['active'] = true;
 output['assignedTo'] = '${snow.desk.assignedTo}';
 output['location'] = recordVars['isSales'] ? '${snow.locationA}' : '${snow.locationB}';
-output['price'] = Double.parseDouble('${snow.desk.price}');
+output['price'] = new BigDecimal('${snow.desk.price}');
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
 payload = output;]]></expression-component>
@@ -81,7 +81,7 @@ output['request'] = recordVars['request2']['sysId'];
 output['parent'] = recordVars['request2']['sysId'];
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
-output['price'] = Double.parseDouble(${snow.desk.price});
+output['price'] = ${snow.desk.price};
 payload = output;]]></expression-component>
                 <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
             </batch:step>
