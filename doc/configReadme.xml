@@ -7,25 +7,24 @@
 	</placeholders>
 	<sections>
 		<section id="use_case">
-			<![CDATA[When a new employee is created, create 2 service requests
+			<![CDATA[When a new employee is hired, create 2 service requests
 1. One service request for setting up a desk
 2. one service request for setting up a computer
 
-If the department is sales, put make the request for Building A, if the department is anything else make their seat building B.	
+If the department is sales, make the request for Building A, if the department is anything else make their seat building B.	
 
 The data is processed as follows:
 1. Workday is polled in intervals for new modifications of employees
 2. Employee data is processed to identify new hires
-3. Service request for a pc is sent to Service Now
-4. Service request for a desk is sent to Service Now
-		
+3. Service request for a computer is sent to ServiceNow
+4. Service request for a desk is sent to ServiceNow		
 			]]>
 		</section>
 		<section id="considerations">
-			<![CDATA[There are no special considerations for this template.  ]]>
+			<![CDATA[There are no special considerations for this template.]]>
 		</section>
 		<section id="application_configuration">
-			<![CDATA[### Application configuration
+			<![CDATA[
 + poll.frequencyMillis `10000`
 + poll.startDelayMillis `500`
 + watermark.default.expression `#[groovy: new Date(System.currentTimeMillis() - 10000)]`
@@ -65,7 +64,7 @@ In this particular template, this file contains a poll inbound endpoints that qu
 		</section>
 		<section id="default_business_logic_xml">
 		<![CDATA[
-This file holds the functional aspect of the template (points 2. to 4. described in the [template overview](#templateoverview)). Its main component is a [*Batch job*][8], and it includes *steps* for executing the broadcast operation from Workday to Service.
+This file holds the functional aspect of the template (points 2. to 4. described in the template overview. Its main component is a Batch job, and it includes *steps* for executing the broadcast operation from Workday to ServiceNow.
 ]]>
 	</section>
 	</sections>

@@ -5,7 +5,7 @@
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.0"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -40,9 +40,13 @@ http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mu
 		</poll>
 
         <logger level="INFO" doc:name="log worker's name" message="#[groovy: payload.collect { it.getWorkerData().getPersonalData().getNameData().getLegalNameData().getNameDetailData().getFirstName() +  ' '+ it.getWorkerData().getPersonalData().getNameData().getLegalNameData().getNameDetailData().getLastName() } ]"/>
-        
-        <batch:execute name="createServiceNowAssets" doc:name="Batch Execute"/>	
+        <flow-ref name="mainFlow" doc:name="Flow Reference"/>
+	
 	</flow>
+    <flow name="mainFlow" doc:name="mainFlow">
+        <batch:execute name="createServiceNowAssets" doc:name="Batch Execute"/>
+        <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy"/>
+    </flow>
 	
 	
 </mule>

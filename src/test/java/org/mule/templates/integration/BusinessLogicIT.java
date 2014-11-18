@@ -33,9 +33,8 @@ import org.mule.context.notification.NotificationException;
 import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.templates.utils.Employee;
 
-import com.mulesoft.module.batch.BatchTestHelper;
-import com.servicenow.screquest.GetRecordsResponse;
-import com.servicenow.screquest.GetRecordsResponse.GetRecordsResult;
+import com.servicenow.servicecatalog.screqitem.GetRecordsResponse.GetRecordsResult;
+import com.servicenow.servicecatalog.screquest.GetRecordsResponse;
 import com.workday.hr.EmployeeGetType;
 import com.workday.hr.EmployeeReferenceType;
 import com.workday.hr.ExternalIntegrationIDReferenceDataType;
@@ -48,10 +47,11 @@ import com.workday.staffing.TerminateEventDataType;
 
 /**
  * The objective of this class is to validate the correct behavior of the flows
- * for this Anypoint Tempalte that make calls to external systems.
+ * for this Anypoint Template that make calls to external systems.
  */
 public class BusinessLogicIT extends AbstractTemplateTestCase {
 
+	private static String WDAY_EXT_ID;
 	private static final String TEMPLATE_PREFIX = "wday2snow-worker-broadcast";
 	private static final long TIMEOUT_MILLIS = 30000;
 	private static final long DELAY_MILLIS = 500;
@@ -65,7 +65,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     private String EXT_ID, EMAIL = "bwillis@gmailtest.com";
 	private Employee employee;
     private List<String> snowReqIds = new ArrayList<String>();
-    
+    private static String WDAY_TERMINATION_ID;
+	
     private static Date startingDate;
     
     @BeforeClass
@@ -79,7 +80,9 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     	} catch (Exception e) {
     		System.out.println("Error occured while reading mule.test.properties" + e);
     	} 
-
+    	
+    	WDAY_TERMINATION_ID = props.getProperty("wday.termination.id");
+    	WDAY_EXT_ID = props.getProperty("wday.ext.id");
     	DESK_ASSIGNED_TO = props.getProperty("snow.desk.assignedTo");
     	PC_MODEL = props.getProperty("snow.pc.model");
     	DESK_MODEL = props.getProperty("snow.desk.model");
@@ -106,8 +109,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		muleContext.registerListener(pipelineListener);
 	}
     
-    @SuppressWarnings("unchecked")
-	private void createTestDataInSandBox() throws MuleException, Exception {
+    private void createTestDataInSandBox() throws MuleException, Exception {
 		SubflowInterceptingChainLifecycleWrapper flow = getSubFlow("hireEmployee");
 		flow.initialise();
 		logger.info("creating a workday employee...");
@@ -128,7 +130,6 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		return list;
 	}
     
-    @SuppressWarnings("unchecked")
 	@Test
     public void testMainFlow() throws Exception {
 		Thread.sleep(10000);
@@ -149,13 +150,13 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		logger.info("snow requests: " + snowRes.getGetRecordsResult().size());
 		
 		int count = 0;
-		for (GetRecordsResult item : snowRes.getGetRecordsResult()){
+		for (com.servicenow.servicecatalog.screquest.GetRecordsResponse.GetRecordsResult item : snowRes.getGetRecordsResult()){
 			if (startingDate.compareTo(sdf.parse(item.getOpenedAt())) < 0){
 				count++;
 				snowReqIds.add(item.getSysId());
-				List<com.servicenow.screqitem.GetRecordsResponse.GetRecordsResult> reqItems = getReqItem(item.getSysId());
+				List<GetRecordsResult> reqItems = getReqItem(item.getSysId());
 				Assert.assertTrue("There should be 1 request item in request in ServiceNow.", reqItems.size() == 1);
-				for (com.servicenow.screqitem.GetRecordsResponse.GetRecordsResult reqItem  : reqItems){
+				for (com.servicenow.servicecatalog.screqitem.GetRecordsResponse.GetRecordsResult reqItem  : reqItems){
 					Assert.assertTrue("There should be correct catalogue item set.", 
 							reqItem.getCatItem().equals(PC_MODEL) || reqItem.getCatItem().equals(DESK_MODEL));
 				}
@@ -166,11 +167,11 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		
     }
     
-    private List<com.servicenow.screqitem.GetRecordsResponse.GetRecordsResult> getReqItem(String parentId) throws MuleException, Exception{
+    private List<GetRecordsResult> getReqItem(String parentId) throws MuleException, Exception{
     	SubflowInterceptingChainLifecycleWrapper flow = getSubFlow("getSnowReqItems");
 		flow.initialise();		
 		MuleEvent response = flow.process(getTestEvent(parentId, MessageExchangePattern.REQUEST_RESPONSE));
-		com.servicenow.screqitem.GetRecordsResponse snowRes = ((com.servicenow.screqitem.GetRecordsResponse)response.getMessage().getPayload());
+		com.servicenow.servicecatalog.screqitem.GetRecordsResponse snowRes = ((com.servicenow.servicecatalog.screqitem.GetRecordsResponse)response.getMessage().getPayload());
 		
 		return snowRes.getGetRecordsResult();
     }
@@ -196,8 +197,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 			MuleEvent response = flow.process(getTestEvent(getEmployee(), MessageExchangePattern.REQUEST_RESPONSE));			
 			flow = getSubFlow("terminateWorkdayEmployee");
 			flow.initialise();
-			response = flow.process(getTestEvent(prepareTerminate(response), MessageExchangePattern.REQUEST_RESPONSE));
-			logger.info("workday delete response: " + response.getMessage().getPayloadAsString());						
+			flow.process(getTestEvent(prepareTerminate(response), MessageExchangePattern.REQUEST_RESPONSE));								
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -211,7 +211,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		IDType idType = new IDType();
 		value.setID(idType);
 		// use an existing external ID just for matching purpose
-		idType.setSystemID("Salesforce - Chatter");
+		idType.setSystemID(WDAY_EXT_ID);
 		idType.setValue(EXT_ID);			
 		empRef.setIntegrationIDReference(value);
 		get.setEmployeeReference(empRef);		
@@ -227,7 +227,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		List<EventClassificationSubcategoryObjectIDType> list = new ArrayList<EventClassificationSubcategoryObjectIDType>();
 		EventClassificationSubcategoryObjectIDType id = new EventClassificationSubcategoryObjectIDType();
 		id.setType("WID");
-		id.setValue("208082cd6b66443e801d95ffdc77461b");
+		id.setValue(WDAY_TERMINATION_ID);
 		list.add(id);
 		prim.setID(list);
 		event.setPrimaryReasonReference(prim);

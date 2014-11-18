@@ -1,3 +1,9 @@
+/**
+ * Mule Anypoint Template
+ *
+ * Copyright (c) MuleSoft, Inc.  All rights reserved.  http://www.mulesoft.com
+ */
+
 package org.mule.templates;
 
 import org.mule.api.MuleEventContext;
@@ -9,7 +15,7 @@ import com.workday.hr.WorkerType;
 public class TransactionsProcessor implements Callable {
 
 	@Override
-	public Object onCall(MuleEventContext eventContext) throws Exception {		
+	public Object onCall(MuleEventContext eventContext) throws Exception {
 		WorkerType workerData = (WorkerType) eventContext.getMessage().getPayload();
 		boolean wasHired = false, wasTerminated = false;
 		if (workerData.getWorkerData() != null){			

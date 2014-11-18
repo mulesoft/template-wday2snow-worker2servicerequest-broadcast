@@ -4,7 +4,7 @@
       xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.5.0"
+      version="EE-3.5.2"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -14,8 +14,6 @@ http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schem
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-    <data-mapper:config name="List_WorkerType__To_Map" transformationGraphPath="list_workertype__to_map_1.grf" doc:name="List_WorkerType__To_Map"/>  	
-	<data-mapper:config name="List_WorkerType__To_Map1" transformationGraphPath="list_workertype__to_map.grf" doc:name="List_WorkerType__To_Map"/>
     
     <batch:job name="createServiceNowAssets">
         <batch:threading-profile poolExhaustedAction="WAIT"/>
@@ -30,63 +28,61 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                 <batch:set-record-variable variableName="worker" value="#[payload]" doc:name="Store worker data"/>
             </batch:step>
             <batch:step name="InsertRequestA" accept-expression="recordVars['isNewHire'] == true">
-                <data-mapper:transform config-ref="List_WorkerType__To_Map" doc:name="List&lt;WorkerType&gt; To Map">
-                    <data-mapper:input-arguments>
-                        <data-mapper:input-argument key="assignedTo">${snow.pc.assignedTo}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="isSales">#[recordVars['isSales']]</data-mapper:input-argument>
-                        <data-mapper:input-argument key="locationA">${snow.locationA}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="locationB">${snow.locationB}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="price">${snow.pc.price}</data-mapper:input-argument>  
-                        <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.pc.deliveryDays})]</data-mapper:input-argument>                                
-                    </data-mapper:input-arguments>
-                </data-mapper:transform>
+                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+output['approval'] = "Requested";
+output['active'] = true;
+output['assignedTo'] = '${snow.pc.assignedTo}';
+output['location'] = recordVars['isSales'] ? '${snow.locationA}' : '${snow.locationB}';
+output['price'] = Double.parseDouble('${snow.pc.price}');
+java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
+output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
+payload = output;]]></expression-component>
                 <enricher source="payload" target="recordVars['request1']" doc:name="store in recordVars['request1']">
                     <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
                 </enricher>
             </batch:step>
             <batch:step name="InsertPcRequestItem" accept-expression="recordVars['isNewHire'] == true">
-                <set-payload value="#[recordVars['worker']]" doc:name="Set Payload"/>
-                <data-mapper:transform config-ref="List_WorkerType__To_Map1" doc:name="Worker to PC Request">
-                    <data-mapper:input-arguments>
-                        <data-mapper:input-argument key="catItem">${snow.pc.model}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="assignedTo">${snow.pc.assignedTo}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="request">#[recordVars['request1']['sysId']]</data-mapper:input-argument>
+                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+output['active'] = true;
+output['approval'] = "requested";
+output['catItem'] = '${snow.pc.model}';
+//output['approvalSet'] = '${snow.pc.assignedTo}';
+output['request'] = recordVars['request1']['sysId'];
+output['parent'] = recordVars['request1']['sysId'];
+java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
+output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
+output['price'] = Double.parseDouble(${snow.pc.price});
+payload = output;]]></expression-component>
 
-                        <data-mapper:input-argument key="price">${snow.pc.price}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.pc.deliveryDays})]</data-mapper:input-argument>
-               
-                    </data-mapper:input-arguments>
-                </data-mapper:transform>
                 <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
             </batch:step>
             <batch:step name="InsertRequestB" accept-expression="recordVars['isNewHire'] == true">
-                <data-mapper:transform config-ref="List_WorkerType__To_Map" doc:name="List&lt;WorkerType&gt; To Map">
-                    <data-mapper:input-arguments>
-                        <data-mapper:input-argument key="assignedTo">${snow.desk.assignedTo}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="isSales">#[recordVars['isSales']]</data-mapper:input-argument>
-                        <data-mapper:input-argument key="locationB">${snow.locationB}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="locationA">${snow.locationA}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="price">${snow.desk.price}</data-mapper:input-argument>
-						<data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.desk.deliveryDays})]</data-mapper:input-argument>
-               
-                    </data-mapper:input-arguments>
-                </data-mapper:transform>
+                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+output['approval'] = "Requested";
+output['active'] = true;
+output['assignedTo'] = '${snow.desk.assignedTo}';
+output['location'] = recordVars['isSales'] ? '${snow.locationA}' : '${snow.locationB}';
+output['price'] = Double.parseDouble('${snow.desk.price}');
+java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
+output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
+payload = output;]]></expression-component>
                 <enricher source="payload" target="recordVars['request2']" doc:name="store in recordVars['request1']">
                     <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
                 </enricher>
             </batch:step>
             <batch:step name="InsertDeskRequestItem" accept-expression="recordVars['isNewHire'] == true">
-                <set-payload value="#[recordVars['worker']]" doc:name="Set Payload"/>
-            	 <data-mapper:transform config-ref="List_WorkerType__To_Map1" doc:name="Worker to Desk Request">
-            	 	<data-mapper:input-arguments>
-                        <data-mapper:input-argument key="catItem">${snow.desk.model}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="assignedTo">${snow.desk.assignedTo}</data-mapper:input-argument>
-                        <data-mapper:input-argument key="request">#[recordVars['request2']['sysId']]</data-mapper:input-argument>
-                        <data-mapper:input-argument key="deliveryDays">#[new java.lang.Integer(${snow.desk.deliveryDays})]</data-mapper:input-argument>
-                        <data-mapper:input-argument key="price">${snow.desk.price}</data-mapper:input-argument>
 
-	            	</data-mapper:input-arguments>
-            	</data-mapper:transform>
+                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+output['active'] = true;
+output['approval'] = "requested";
+output['catItem'] = '${snow.desk.model}';
+output['approvalSet'] = '${snow.desk.assignedTo}';
+output['request'] = recordVars['request2']['sysId'];
+output['parent'] = recordVars['request2']['sysId'];
+java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
+output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
+output['price'] = Double.parseDouble(${snow.desk.price});
+payload = output;]]></expression-component>
                 <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
             </batch:step>
         </batch:process-records>

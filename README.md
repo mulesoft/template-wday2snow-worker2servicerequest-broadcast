@@ -26,17 +26,17 @@ Note that using this template is subject to the conditions of this [License Agre
 Please review the terms of the license before downloading and using this template. In short, you are allowed to use the template for free with Mule ESB Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
 
 # Use Case <a name="usecase"/>
-When a new employee is created, create 2 service requests
+When a new employee is hired, create 2 service requests
 1. One service request for setting up a desk
 2. one service request for setting up a computer
 
-If the department is sales, put make the request for Building A, if the department is anything else make their seat building B.	
+If the department is sales, make the request for Building A, if the department is anything else make their seat building B.	
 
 The data is processed as follows:
 1. Workday is polled in intervals for new modifications of employees
 2. Employee data is processed to identify new hires
-3. Service request for a pc is sent to Service Now
-4. Service request for a desk is sent to Service Now
+3. Service request for a computer is sent to ServiceNow
+4. Service request for a desk is sent to ServiceNow
 
 # Considerations <a name="considerations"/>
 
@@ -111,7 +111,6 @@ Mule Studio provides you with really easy way to deploy your Template directly t
 ## Properties to be configured (With examples) <a name="propertiestobeconfigured"/>
 In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detail list with examples:
 ### Application configuration
-### Application configuration
 + poll.frequencyMillis `10000`
 + poll.startDelayMillis `500`
 + watermark.default.expression `#[groovy: new Date(System.currentTimeMillis() - 10000)]`
@@ -163,7 +162,7 @@ In the visual editor they can be found on the *Global Element* tab.
 
 
 ## businessLogic.xml<a name="businesslogicxml"/>
-This file holds the functional aspect of the template (points 2. to 4. described in the [template overview](#templateoverview)). Its main component is a [*Batch job*][8], and it includes *steps* for executing the broadcast operation from Workday to Service.
+This file holds the functional aspect of the template (points 2. to 4. described in the template overview. Its main component is a Batch job, and it includes *steps* for executing the broadcast operation from Workday to ServiceNow.
 
 
 
