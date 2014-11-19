@@ -72,8 +72,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     
     @BeforeClass
     public static void beforeTestClass() {
-        System.setProperty("poll.startDelayMillis", "8000");
-        System.setProperty("poll.frequencyMillis", "30000");
+        System.setProperty("poll.startDelayMillis", "0");
+        System.setProperty("poll.frequencyMillis", "60000");
         
         final Properties props = new Properties();
     	try {
@@ -133,8 +133,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     
 	@Test
     public void testMainFlow() throws Exception {
-		// sometimes a pause is needed for a poller to catch a worker hire event
-//		Thread.sleep(10000);
+		Thread.sleep(10000);
 		runSchedulersOnce(POLL_FLOW_NAME);
 		waitForPollToRun();
 		helper.awaitJobTermination(TIMEOUT_MILLIS, DELAY_MILLIS);
