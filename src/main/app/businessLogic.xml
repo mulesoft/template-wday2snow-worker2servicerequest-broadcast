@@ -26,8 +26,24 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
                     <component class="org.mule.templates.DepartmentProcessor" doc:name="Check for sales organization"/>
                 </enricher>
             </batch:step>
-            <batch:step name="InsertRequestA" accept-expression="recordVars['isNewHire'] == true">
-                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+            <batch:step name="InsertPcRequest" accept-expression="recordVars['isNewHire'] == true">
+                <flow-ref name="insertPcRequest" doc:name="Flow Reference"/>
+
+            </batch:step>
+
+            <batch:step name="InsertDeskRequest" accept-expression="recordVars['isNewHire'] == true">
+                <flow-ref name="insertDeskRequest" doc:name="Flow Reference"/>
+
+            </batch:step>
+
+        </batch:process-records>
+        <batch:on-complete>
+            <json:object-to-json-transformer doc:name="Convert Batch results to JSON"/>
+            <logger level="INFO" doc:name="Log the batch result" message="Batch completed: #[payload]"/>
+        </batch:on-complete>
+    </batch:job>
+    <sub-flow name="insertPcRequest" doc:name="insertPcRequest">
+        <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
 output['approval'] = "Requested";
 output['active'] = true;
 output['assignedTo'] = '${snow.pc.assignedTo}';
@@ -36,12 +52,10 @@ output['price'] = new BigDecimal('${snow.pc.price}');
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
 payload = output;]]></expression-component>
-                <enricher source="payload" target="recordVars['request1']" doc:name="store in recordVars['request1']">
-                    <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
-                </enricher>
-            </batch:step>
-            <batch:step name="InsertPcRequestItem" accept-expression="recordVars['isNewHire'] == true">
-                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+        <enricher source="payload" target="recordVars['request1']" doc:name="store in recordVars['request1']">
+            <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
+        </enricher>
+        <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
 output['active'] = true;
 output['approval'] = "requested";
 output['catItem'] = '${snow.pc.model}';
@@ -52,11 +66,10 @@ java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
 output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
 output['price'] = ${snow.pc.price};
 payload = output;]]></expression-component>
-
-                <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
-            </batch:step>
-            <batch:step name="InsertRequestB" accept-expression="recordVars['isNewHire'] == true">
-                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+        <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
+    </sub-flow>
+    <sub-flow name="insertDeskRequest" doc:name="insertDeskRequest">
+        <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
 output['approval'] = "Requested";
 output['active'] = true;
 output['assignedTo'] = '${snow.desk.assignedTo}';
@@ -65,13 +78,10 @@ output['price'] = new BigDecimal('${snow.desk.price}');
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
 payload = output;]]></expression-component>
-                <enricher source="payload" target="recordVars['request2']" doc:name="store in recordVars['request1']">
-                    <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
-                </enricher>
-            </batch:step>
-            <batch:step name="InsertDeskRequestItem" accept-expression="recordVars['isNewHire'] == true">
-
-                <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
+        <enricher source="payload" target="recordVars['request2']" doc:name="store in recordVars['request1']">
+            <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
+        </enricher>
+        <expression-component doc:name="Expression"><![CDATA[java.util.Map output = new java.util.HashMap();
 output['active'] = true;
 output['approval'] = "requested";
 output['catItem'] = '${snow.desk.model}';
@@ -82,14 +92,8 @@ java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");
 output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
 output['price'] = ${snow.desk.price};
 payload = output;]]></expression-component>
-                <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
-            </batch:step>
-        </batch:process-records>
-        <batch:on-complete>
-            <json:object-to-json-transformer doc:name="Convert Batch results to JSON"/>
-            <logger level="INFO" doc:name="Log the batch result" message="Batch completed: #[payload]"/>
-        </batch:on-complete>
-    </batch:job>
+        <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
+    </sub-flow>
     <sub-flow name="insertRequestFlow" doc:name="insertRequestFlow">
         <servicenow:insert config-ref="ServiceNow" type="SC_REQUEST" doc:name="ServiceNow">
             <servicenow:insert-request ref="#[payload]"/>
