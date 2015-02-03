@@ -17,6 +17,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import com.workday.hr.EffectiveAndUpdatedDateTimeDataType;
 import com.workday.hr.GetWorkersRequestType;
 import com.workday.hr.TransactionLogCriteriaType;
+import com.workday.hr.TransactionLogTypeObjectIDType;
+import com.workday.hr.TransactionLogTypeObjectType;
+import com.workday.hr.TransactionTypeReferencesType;
 import com.workday.hr.WorkerRequestCriteriaType;
 import com.workday.hr.WorkerResponseGroupType;
 
@@ -32,6 +35,17 @@ public class WorkersRequest {
 		TransactionLogCriteriaType transactionLogCriteria = new TransactionLogCriteriaType();
 		transactionLogCriteria.setTransactionDateRangeData(dateRangeData);
 
+		TransactionTypeReferencesType transactionTypeReferences = new TransactionTypeReferencesType();
+        TransactionLogTypeObjectType transactionLogTypeObjectType = new TransactionLogTypeObjectType();
+        TransactionLogTypeObjectIDType idType = new TransactionLogTypeObjectIDType();
+
+        idType.setType("Business_Process_Type");
+        idType.setValue("Hire Employee");
+
+        transactionLogTypeObjectType.getID().add(idType);
+        transactionTypeReferences.getTransactionTypeReference().add(transactionLogTypeObjectType);
+        transactionLogCriteria.setTransactionTypeReferences(transactionTypeReferences);
+		
 		WorkerRequestCriteriaType workerRequestCriteria = new WorkerRequestCriteriaType();
 		workerRequestCriteria.getTransactionLogCriteriaData().add(transactionLogCriteria);
 		GetWorkersRequestType getWorkersType = new GetWorkersRequestType();
