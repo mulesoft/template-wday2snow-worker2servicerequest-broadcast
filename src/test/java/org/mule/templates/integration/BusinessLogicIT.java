@@ -31,6 +31,7 @@ import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.context.notification.NotificationException;
 import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
+import org.mule.templates.utils.DateUtil;
 import org.mule.templates.utils.Employee;
 
 import com.mulesoft.module.batch.BatchTestHelper;
@@ -144,7 +145,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		Map<String, String> inputMap = new HashMap<String, String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		logger.info("starting date: " + sdf.format(startingDate));
-		inputMap.put("assignedTo", DESK_ASSIGNED_TO);
+		inputMap.put("assignedTo", ">" + DateUtil.applyTimeZone(startingDate, "yyyy-MM-dd HH:mm:ss", "GMT"));
 		
 		MuleEvent response = flow.process(getTestEvent(DESK_ASSIGNED_TO, MessageExchangePattern.REQUEST_RESPONSE));
 		GetRecordsResponse snowRes = ((GetRecordsResponse)response.getMessage().getPayload());
