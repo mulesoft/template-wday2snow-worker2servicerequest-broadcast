@@ -27,7 +27,7 @@ Please review the terms of the license before downloading and using this templat
 
 # Use Case <a name="usecase"/>
 When a new employee is hired, create 2 service requests
-1. One service request for setting up a desk
+1. one service request for setting up a desk
 2. one service request for setting up a computer
 
 If the department is sales, make the request for Building A, if the department is anything else make their seat building B.	
