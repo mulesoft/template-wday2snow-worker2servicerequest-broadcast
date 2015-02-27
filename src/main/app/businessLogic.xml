@@ -51,7 +51,7 @@ output['price'] = new BigDecimal('${snow.pc.price}');
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
 payload = output;]]></expression-component>
-        <enricher source="payload" target="recordVars['request1']" doc:name="store in recordVars['request1']">
+        <enricher source="payload" target="recordVars['pcRequest']" doc:name="store in recordVars['pcRequest']">
             <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
         </enricher>
         <expression-component doc:name="Create Service Request Item"><![CDATA[java.util.Map output = new java.util.HashMap();
@@ -59,8 +59,8 @@ output['active'] = true;
 output['approval'] = "requested";
 output['catItem'] = '${snow.pc.model}';
 //output['approvalSet'] = '${snow.pc.assignedTo}';
-output['request'] = recordVars['request1']['sysId'];
-output['parent'] = recordVars['request1']['sysId'];
+output['request'] = recordVars['pcRequest']['sysId'];
+output['parent'] = recordVars['pcRequest']['sysId'];
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
 output['price'] = ${snow.pc.price};
@@ -77,7 +77,7 @@ output['price'] = new BigDecimal('${snow.desk.price}');
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
 payload = output;]]></expression-component>
-        <enricher source="payload" target="recordVars['request2']" doc:name="store in recordVars['request1']">
+        <enricher source="payload" target="recordVars['deskRequest']" doc:name="store in recordVars['deskRequest']">
             <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
         </enricher>
         <expression-component doc:name="Create Service Request Item"><![CDATA[java.util.Map output = new java.util.HashMap();
@@ -85,8 +85,8 @@ output['active'] = true;
 output['approval'] = "requested";
 output['catItem'] = '${snow.desk.model}';
 output['approvalSet'] = '${snow.desk.assignedTo}';
-output['request'] = recordVars['request2']['sysId'];
-output['parent'] = recordVars['request2']['sysId'];
+output['request'] = recordVars['deskRequest']['sysId'];
+output['parent'] = recordVars['deskRequest']['sysId'];
 java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
 output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
 output['price'] = ${snow.desk.price};
