@@ -1,5 +1,5 @@
 
-# Anypoint Template: Workday Worker to ServiceNow Request Broadcast
+# Anypoint Template: Workday Worker to ServiceNow Service Request Broadcast
 
 + [License Agreement](#licenseagreement)
 + [Use Case](#usecase)
@@ -62,7 +62,7 @@ There are no particular considerations for this Anypoint Template regarding Work
 
 
 # Run it! <a name="runit"/>
-Simple steps to get Workday Worker to ServiceNow Request Broadcast running.
+Simple steps to get Workday Worker to ServiceNow Service Request Broadcast running.
 
 
 ## Running on premise <a name="runonopremise"/>
