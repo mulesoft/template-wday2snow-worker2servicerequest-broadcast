@@ -4,7 +4,7 @@
       xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.5.2"
+      version="EE-3.6.1"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -41,7 +41,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
             <logger level="INFO" doc:name="Log the batch result" message="Batch completed: #[payload]"/>
         </batch:on-complete>
     </batch:job>
-    <sub-flow name="insertPcRequest" doc:name="insertPcRequest">
+    <sub-flow name="insertPcRequest" >
         <expression-component doc:name="Create Service Request"><![CDATA[java.util.Map output = new java.util.HashMap();
 output['approval'] = "Requested";
 output['active'] = true;
@@ -67,7 +67,7 @@ output['price'] = ${snow.pc.price};
 payload = output;]]></expression-component>
         <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
     </sub-flow>
-    <sub-flow name="insertDeskRequest" doc:name="insertDeskRequest">
+    <sub-flow name="insertDeskRequest" >
         <expression-component doc:name="Create Service Request"><![CDATA[java.util.Map output = new java.util.HashMap();
 output['approval'] = "Requested";
 output['active'] = true;
@@ -93,13 +93,13 @@ output['price'] = ${snow.desk.price};
 payload = output;]]></expression-component>
         <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
     </sub-flow>
-    <sub-flow name="insertRequestFlow" doc:name="insertRequestFlow">
+    <sub-flow name="insertRequestFlow" >
         <servicenow:insert config-ref="ServiceNow" type="SC_REQUEST" doc:name="Insert Service Request">
             <servicenow:insert-request ref="#[payload]"/>
         </servicenow:insert>
         <logger message="request: #[payload]" level="INFO" doc:name="Log the insert response"/>
     </sub-flow>
-    <sub-flow name="insertItemFlow" doc:name="insertItemFlow">
+    <sub-flow name="insertItemFlow" >
         <servicenow:insert config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="Insert Service Request Item"/>
         <json:object-to-json-transformer doc:name="Convert InsertResponse to JSON"/>
         <logger message="request item: #[payload]" level="INFO" doc:name="Log the insert respone"/>
