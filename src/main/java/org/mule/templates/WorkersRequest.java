@@ -26,12 +26,13 @@ import com.workday.hr.WorkerResponseGroupType;
 
 public class WorkersRequest {
 
+	
 	public static GetWorkersRequestType create(Date startDate) throws ParseException, DatatypeConfigurationException {
 
 		EffectiveAndUpdatedDateTimeDataType dateRangeData = new EffectiveAndUpdatedDateTimeDataType();
 		dateRangeData.setUpdatedFrom(xmlDate(startDate));
 		dateRangeData.setUpdatedThrough(xmlDate(new Date()));
-		
+		System.out.println("poll interval: " + dateRangeData.getUpdatedFrom() + " " + dateRangeData.getUpdatedThrough());
 		TransactionLogCriteriaType transactionLogCriteria = new TransactionLogCriteriaType();
 		transactionLogCriteria.setTransactionDateRangeData(dateRangeData);
 
