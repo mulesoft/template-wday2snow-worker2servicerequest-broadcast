@@ -30,9 +30,10 @@ When a new employee is hired, create 2 service requests
 1. one service request for setting up a desk
 2. one service request for setting up a computer
 
-If the department is sales, make the request for Building A, if the department is anything else make their seat building B.	
+If in the given department, make the request for Building A, if the department is anything else make their seat building B.	
 
 The data is processed as follows:
+
 1. Workday is polled in intervals for new modifications of employees
 2. Employee data is processed to identify new hires
 3. Service request for a computer is sent to ServiceNow
@@ -120,6 +121,7 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + wday.user `user1@mulesoft_pt1`
 + wday.password `ExamplePassword565`
 + wday.endpoint `https://services1.workday.com/ccx/service/acme/Human_Resources/v20`
++ wday.department `sales`
 
 #### ServiceNow Connector configuration for company B
 + snow.user `snow_user1`

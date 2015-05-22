@@ -53,6 +53,7 @@ import com.workday.staffing.TerminateEventDataType;
  */
 public class BusinessLogicIT extends AbstractTemplateTestCase {
 
+	private static final int WDAY_WAIT_TIME = 15000;
 	private static String WDAY_EXT_ID;
 	private static final String TEMPLATE_PREFIX = "wday2snow-worker-broadcast";
 	private static final long TIMEOUT_MILLIS = 30000;
@@ -134,11 +135,13 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     
 	@Test
     public void testMainFlow() throws Exception {
-		Thread.sleep(10000);
+		Thread.sleep(WDAY_WAIT_TIME);
 		runSchedulersOnce(POLL_FLOW_NAME);
 		waitForPollToRun();
 		helper.awaitJobTermination(TIMEOUT_MILLIS, DELAY_MILLIS);
 		helper.assertJobWasSuccessful();	
+		
+		Thread.sleep(WDAY_WAIT_TIME);
 		
 		SubflowInterceptingChainLifecycleWrapper flow = getSubFlow("getSnowRequests");
 		flow.initialise();

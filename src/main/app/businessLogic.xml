@@ -4,7 +4,7 @@
       xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.6.1"
+      version="EE-3.6.2"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -19,9 +19,23 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
             <batch:step name="CheckIfInSales" >
+                <set-variable variableName="department" value="${wday.department}" doc:name="Set 'department' variable"/>
 
                 <enricher source="payload" target="recordVars['isSales']" doc:name="store in recordVars['isSales']">
-                    <component class="org.mule.templates.DepartmentProcessor" doc:name="Check for sales organization"/>
+                    <expression-component doc:name="Check if in department"><![CDATA[import java.util.Map;
+import java.util.List;
+
+java.util.List orgNames =payload["orgNames"];
+payload = false;
+
+if (orgNames != null){
+	for (Map org : orgNames){           
+			if (org.get("name").contains(flowVars['department'])) 
+					payload = true;		
+	}		
+};
+      ]]></expression-component>
+
                 </enricher>
             </batch:step>
             <batch:step name="InsertPcRequest" >

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+<<<<<<< HEAD
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5p %d [%t] %c: %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+
+        <!-- CXF is used heavily by Mule for web services -->
+        <AsyncLogger name="org.apache.cxf" level="WARN"/>
+
+        <!-- Apache Commons tend to make a lot of noise which can clutter the log-->
+        <AsyncLogger name="org.apache" level="WARN"/>
+
+        <!-- Reduce startup noise -->
+        <AsyncLogger name="org.springframework.beans.factory" level="WARN"/>
+
+        <!-- Mule classes -->
+        <AsyncLogger name="org.mule" level="INFO"/>
+        <AsyncLogger name="com.mulesoft" level="INFO"/>
+
+        <!-- Reduce DM verbosity -->
+        <AsyncLogger name="org.jetel" level="WARN"/>
+        <AsyncLogger name="Tracking" level="WARN"/>
+
+        <AsyncRoot level="INFO">
+            <AppenderRef ref="Console"/>
+        </AsyncRoot>
+    </Loggers>
+
+=======
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%-5p %d [%t] %c: %m%n"/>
+    </Console>
+  </Appenders>
+  
+  <!-- You can set custom log levels per-package here -->
+  <Loggers>
+	
+	<!-- CXF is used heavily by Mule for web services -->
+    <Logger name="org.apache.cxf" level="warn"/>
+	
+	<!-- Apache Commons tend to make a lot of noise which can clutter the log. -->
+    <Logger name="org.apache" level="warn"/>
+    
+    <!-- Reduce startup noise -->
+    <Logger name="org.springframework.beans.factory" level="warn"/>
+	
+	<!-- Mule classes -->
+    <Logger name="org.mule" level="info"/>
+    <Logger name="com.mulesoft" level="info"/>
+    
+    <!-- Reduce DM verbosity -->
+    <Logger name="org.jetel" level="warn"/>
+    <Logger name="Tracking" level="warn"/>
+   
+    <Root level="info">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+  </Loggers>
+>>>>>>> fc51ab39abcb1c644f2b70b0ff4d29263773d296
+</Configuration>
