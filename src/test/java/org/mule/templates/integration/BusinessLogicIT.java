@@ -92,6 +92,19 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     	Calendar cal = Calendar.getInstance();
     	cal.add(Calendar.HOUR_OF_DAY, -2);
     	startingDate = cal.getTime();
+    	
+    	Date initialDate = new Date(System.currentTimeMillis());        
+        cal.setTime(initialDate);
+        System.setProperty(
+        		"watermark.default.expression", 
+        		"#[groovy: new GregorianCalendar("
+        				+ cal.get(Calendar.YEAR) + ","
+        				+ cal.get(Calendar.MONTH) + ","
+        				+ cal.get(Calendar.DAY_OF_MONTH) + ","
+        				+ cal.get(Calendar.HOUR_OF_DAY) + ","
+        				+ cal.get(Calendar.MINUTE) + ","
+        				+ cal.get(Calendar.SECOND) + ") ]");
+
     }
 
     @Before
