@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule 
-	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" 
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" 
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" 
 	xmlns:json="http://www.mulesoft.org/schema/mule/json" 
 	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" 
@@ -24,27 +23,25 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
             <batch:step name="CheckIfInSales" >
 
 
-                <enricher source="payload" target="recordVars['isSales']" doc:name="store in recordVars['isSales']">
-                    <expression-component doc:name="Check if in department"><![CDATA[payload = false;
-if (payload.orgNames != null){
-	for (org : payload.orgNames){           
-		if (org.name.contains("${wday.department}")) {
-				payload = true;	break;	
-		}
-	}		
-};
-      ]]></expression-component>
+                <enricher source="payload" target="recordVars.isSales" doc:name="store in recordVars.isSales">
+                    <dw:transform-message doc:name="Check Department">
+                        <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload.orgNames.*name map ($ contains p('wday.department')) reduce $$ or $]]></dw:set-payload>
+                    </dw:transform-message>
+
 
                 </enricher>
             </batch:step>
             <batch:step name="InsertPcRequest" >
 
-                <flow-ref name="insertPcRequest" doc:name="Flow Reference"/>
+                <flow-ref name="insertPcRequest" doc:name="call insertPcRequest"/>
 
             </batch:step>
 
             <batch:step name="InsertDeskRequest" >
-                <flow-ref name="insertDeskRequest" doc:name="Flow Reference"/>
+                <flow-ref name="insertDeskRequest" doc:name="call insertDeskRequest"/>
 
             </batch:step>
 

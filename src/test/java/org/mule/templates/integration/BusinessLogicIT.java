@@ -26,10 +26,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mule.DefaultMuleMessage;
 import org.mule.MessageExchangePattern;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.lifecycle.InitialisationException;
+import org.mule.construct.Flow;
 import org.mule.context.notification.NotificationException;
 import org.mule.processor.chain.SubflowInterceptingChainLifecycleWrapper;
 import org.mule.templates.utils.Employee;
@@ -60,8 +62,6 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 	private static String PC_MODEL;
 	private static String DESK_MODEL;
 	private static String DESK_ASSIGNED_TO;
-	private static String WDAY_EXT_ID;
-	private static String WDAY_TERMINATION_ID;
 	private static Date startingDate;
 
 	private BatchTestHelper helper;
@@ -69,13 +69,11 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 	private Employee employee;
     private List<String> snowReqIds = new ArrayList<String>();
     
-    private SubflowInterceptingChainLifecycleWrapper getSnowReqItemsSubflow;
     private SubflowInterceptingChainLifecycleWrapper hireEmployeeSubflow;
-    private SubflowInterceptingChainLifecycleWrapper getSnowRequestsSubflow;
+    private SubflowInterceptingChainLifecycleWrapper getSnowReqItemsSubflow;
     private SubflowInterceptingChainLifecycleWrapper deleteRequestsSubflow; 
     private SubflowInterceptingChainLifecycleWrapper deleteReqItemsSubflow;
-    private SubflowInterceptingChainLifecycleWrapper getWorkdayToTerminateSubflow;
-    private SubflowInterceptingChainLifecycleWrapper terminateWorkdayEmployeeSubflow;
+    private SubflowInterceptingChainLifecycleWrapper terminateEmployeeSubflow;
 	
     
     @BeforeClass
@@ -90,14 +88,12 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     		LOGGER.error("Error occured while reading mule.test.properties" + e);
     	} 
     	
-    	WDAY_TERMINATION_ID = props.getProperty("wday.termination.id");
-    	WDAY_EXT_ID = props.getProperty("wday.ext.id");
     	DESK_ASSIGNED_TO = props.getProperty("snow.desk.assignedTo");
     	PC_MODEL = props.getProperty("snow.pc.model");
     	DESK_MODEL = props.getProperty("snow.desk.model");
     	
     	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.MINUTE, -3);
+    	cal.add(Calendar.MINUTE, -1);
     	startingDate = cal.getTime();   	
         System.setProperty(
         		"watermark.default.expression", 
@@ -134,7 +130,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		helper.assertJobWasSuccessful();	
 		
 		// get requests from ServiceNow
-		MuleEvent response = getSnowRequestsSubflow.process(getTestEvent(DESK_ASSIGNED_TO, MessageExchangePattern.REQUEST_RESPONSE));
+		Flow getSnowRequestsFlow =  (Flow) muleContext.getRegistry().lookupObject("getSnowRequestsFlow");
+		MuleEvent response = getSnowRequestsFlow.process(getTestEvent(new DefaultMuleMessage(DESK_ASSIGNED_TO, muleContext)));
 		
 		List<Map<String, String>> snowRes = (List<Map<String, String>>) response.getMessage().getPayload();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -189,44 +186,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		}
 				
     	// Terminate the created users in Workday
-		try {
-			MuleEvent response = getWorkdayToTerminateSubflow.process(getTestEvent(getEmployee(), MessageExchangePattern.REQUEST_RESPONSE));			
-			terminateWorkdayEmployeeSubflow.process(getTestEvent(prepareTerminate(response), MessageExchangePattern.REQUEST_RESPONSE));								
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
+		terminateEmployeeSubflow.process(getTestEvent(EXT_ID, MessageExchangePattern.REQUEST_RESPONSE));								
 		LOGGER.info("Deleting test data finished...");
-	}
-    
-    private EmployeeGetType getEmployee(){
-		EmployeeGetType get = new EmployeeGetType();
-		EmployeeReferenceType empRef = new EmployeeReferenceType();					
-		ExternalIntegrationIDReferenceDataType value = new ExternalIntegrationIDReferenceDataType();
-		IDType idType = new IDType();
-		value.setID(idType);
-		// use an existing external ID just for matching purpose
-		idType.setSystemID(WDAY_EXT_ID);
-		idType.setValue(EXT_ID);			
-		empRef.setIntegrationIDReference(value);
-		get.setEmployeeReference(empRef);		
-		return get;
-	}
-	
-	private TerminateEmployeeRequestType prepareTerminate(MuleEvent response) throws DatatypeConfigurationException{
-		TerminateEmployeeRequestType req = (TerminateEmployeeRequestType) response.getMessage().getPayload();
-		TerminateEmployeeDataType eeData = req.getTerminateEmployeeData();		
-		TerminateEventDataType event = new TerminateEventDataType();
-		eeData.setTerminationDate(new GregorianCalendar());
-		EventClassificationSubcategoryObjectType prim = new EventClassificationSubcategoryObjectType();
-		List<EventClassificationSubcategoryObjectIDType> list = new ArrayList<EventClassificationSubcategoryObjectIDType>();
-		EventClassificationSubcategoryObjectIDType id = new EventClassificationSubcategoryObjectIDType();
-		id.setType("WID");
-		id.setValue(WDAY_TERMINATION_ID);
-		list.add(id);
-		prim.setID(list);
-		event.setPrimaryReasonReference(prim);
-		eeData.setTerminateEventData(event );
-		return req;		
 	}
 	
 	private void initializeSubFlows() throws InitialisationException {
@@ -235,9 +196,6 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     	
 		getSnowReqItemsSubflow = getSubFlow("getSnowReqItems");
 		getSnowReqItemsSubflow.initialise();
-    	
-    	getSnowRequestsSubflow = getSubFlow("getSnowRequests");
-		getSnowRequestsSubflow.initialise();
 		
 		deleteRequestsSubflow = getSubFlow("deleteRequests");
 		deleteRequestsSubflow.initialise();
@@ -245,11 +203,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		deleteReqItemsSubflow = getSubFlow("deleteReqItems");
 		deleteReqItemsSubflow.initialise();
 		
-		getWorkdayToTerminateSubflow = getSubFlow("getWorkdaytoTerminateFlow");
-		getWorkdayToTerminateSubflow.initialise();
-
-		terminateWorkdayEmployeeSubflow = getSubFlow("terminateWorkdayEmployee");
-		terminateWorkdayEmployeeSubflow.initialise();
+		terminateEmployeeSubflow = getSubFlow("terminateWorkdayEmployee");
+		terminateEmployeeSubflow.initialise();
 	}
 	
 	private void registerListeners() throws NotificationException {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule  version="EE-3.7.2"
-	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
 	xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr"
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" 
@@ -39,15 +38,15 @@ http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd
 				transactionDateRangeData: {
 					updatedFrom		: flowVars.lastQueryDate,
 					updatedThrough	: now - |PT6S|
+				},
+			 	transactionTypeReferences: {
+					transactionTypeReference: [{
+						ID: [{
+							type: "Business_Process_Type",
+							value: "Hire Employee"
+						}]
+					}]
 				}
-//			 	transactionTypeReferences: {
-//					transactionTypeReference: [{
-//						ID: [{
-//							type: "Business_Process_Type",
-//							value: "Hire Employee"
-//						}]
-//					}]
-//				}
 			}
 		]
 	},

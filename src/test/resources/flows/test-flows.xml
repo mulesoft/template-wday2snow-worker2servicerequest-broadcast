@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule version="EE-3.7.2"
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" 
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" 
 	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" 
 	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" 
 	xmlns:wd-hr="http://www.mulesoft.org/schema/mule/wd-hr" 
@@ -16,7 +17,9 @@ http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfd
 http://www.mulesoft.org/schema/mule/wd-staffing http://www.mulesoft.org/schema/mule/wd-staffing/current/mule-wd-staffing.xsd
 http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd-hr/current/mule-wd-hr.xsd
 http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
-http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
     <wd-staffing:config name="Workday_Staffing" staffingUser="${wday.user}" staffingPassword="${wday.password}" staffingEndpoint="${wday.endpoint}" doc:name="Workday Staffing">
         <wd-staffing:connection-pooling-profile initialisationPolicy="INITIALISE_ONE" exhaustedAction="WHEN_EXHAUSTED_GROW"/>
     </wd-staffing:config>
@@ -77,7 +80,7 @@ payload]]></dw:set-payload>
         <logger message="deleteSnowReqItems response: #[payload]" level="INFO" doc:name="Logger"/>
 
     </sub-flow>
-    <sub-flow name="getSnowReqItems" >
+    <sub-flow name="getSnowReqItems">
         <dw:transform-message doc:name="Create request">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/xml
@@ -96,10 +99,8 @@ payload]]></dw:set-payload>
 ---
 payload.getRecordsResponse.*getRecordsResult]]></dw:set-payload>
         </dw:transform-message>
-        <logger message="getSnowReqItems response: #[payload]" level="INFO" doc:name="Logger"/>
-
     </sub-flow>
-    <sub-flow name="getSnowRequests" >
+    <flow name="getSnowRequestsFlow">
         <dw:transform-message doc:name="Create request">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/xml
@@ -107,28 +108,39 @@ payload.getRecordsResponse.*getRecordsResult]]></dw:set-payload>
 ---
 {
 	ns0#getRecords: {
-		ns0#assigned_to: payload
+		ns0#"assigned_to": payload
 	}
-}
-
-
-]]></dw:set-payload>
+}]]></dw:set-payload>
         </dw:transform-message>
-        <servicenow:invoke config-ref="ServiceNow" type="sc_request||getRecords" doc:name="ServiceNow"/>
+        <servicenow:invoke config-ref="ServiceNow" type="sc_req_item||getRecords" doc:name="ServiceNow"/>
         <dw:transform-message doc:name="XML to Java">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/java
 ---
 payload.getRecordsResponse.*getRecordsResult]]></dw:set-payload>
         </dw:transform-message>
-        <logger message="getSnowRequests response: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
 
-    </sub-flow>
 
     
-    <sub-flow name="getWorkdaytoTerminateFlow" >
-        <logger message="starting getWorkdaytoTerminateFlow" level="INFO" doc:name="Logger"/>
-        <wd-hr:get-employee config-ref="Workday_Human_Resource" doc:name="Workday Human Resource"/>
+    <sub-flow name="terminateWorkdayEmployee" >
+        <logger message="starting terminateEmployeeFlow: #[payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Create EmployeeGetType">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+{
+	employeeReference : {
+		integrationIDReference: {
+			ID : {
+				systemID : p('wday.ext.id'),
+				value : payload
+			}
+		}
+	}
+} as :object {class : "com.workday.hr.EmployeeGetType"}]]></dw:set-payload>
+        </dw:transform-message>
+        <wd-hr:get-employee config-ref="Workday_Human_Resource" doc:name="Get Employee"/>
         <dw:transform-message doc:name="EmployeeType to TerminateEmployeeRequestType">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/java
@@ -137,6 +149,15 @@ payload.getRecordsResponse.*getRecordsResult]]></dw:set-payload>
 {
 	version					: response.version,
 	terminateEmployeeData 	: {
+		terminationDate		: now as :date,
+		terminateEventData  : {
+			primaryReasonReference: {
+				ID: [{
+					type: "WID",
+					value: p('wday.termination.id')
+				}]
+			}
+		},
 		employeeReference	: {
 			descriptor		: response.employeeReference.integrationIDReference.descriptor,
 			ID				: response.employeeData map {
@@ -149,12 +170,12 @@ payload.getRecordsResponse.*getRecordsResult]]></dw:set-payload>
 unless (response.employeeData is :null) otherwise []
 ]]></dw:set-payload>
         </dw:transform-message>
+        <wd-staffing:terminate-employee config-ref="Workday_Staffing" doc:name="Terminate Employee"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Workday terminate flow: #[payload]" level="INFO" doc:name="Logger"/>
 
 	</sub-flow>
-    
-    <sub-flow name="terminateWorkdayEmployee" >
-    	<wd-staffing:terminate-employee config-ref="Workday_Staffing" doc:name="Workday Staffing" />
-    </sub-flow>
+
 
     
 </mule>
