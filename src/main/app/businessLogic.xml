@@ -1,51 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
-      xmlns="http://www.mulesoft.org/schema/mule/core"
-      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-      xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.6.2"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" 
+	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" 
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" 
+	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" 
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+    xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:spring="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
-http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
     
     <batch:job name="createServiceNowAssets">
         <batch:threading-profile poolExhaustedAction="WAIT"/>
         <batch:process-records>
             <batch:step name="CheckIfInSales" >
-                <set-variable variableName="department" value="${wday.department}" doc:name="Set 'department' variable"/>
 
-                <enricher source="payload" target="recordVars['isSales']" doc:name="store in recordVars['isSales']">
-                    <expression-component doc:name="Check if in department"><![CDATA[import java.util.Map;
-import java.util.List;
 
-java.util.List orgNames =payload["orgNames"];
-payload = false;
+                <enricher source="payload" target="recordVars.isSales" doc:name="store in recordVars.isSales">
+                    <dw:transform-message doc:name="Check Department">
+                        <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload.orgNames.*name map ($ contains p('wday.department')) reduce $$ or $]]></dw:set-payload>
+                    </dw:transform-message>
 
-if (orgNames != null){
-	for (Map org : orgNames){           
-			if (org.get("name").contains(flowVars['department'])) 
-					payload = true;		
-	}		
-};
-      ]]></expression-component>
 
                 </enricher>
             </batch:step>
             <batch:step name="InsertPcRequest" >
 
-                <flow-ref name="insertPcRequest" doc:name="Flow Reference"/>
+                <flow-ref name="insertPcRequest" doc:name="call insertPcRequest"/>
 
             </batch:step>
 
             <batch:step name="InsertDeskRequest" >
-                <flow-ref name="insertDeskRequest" doc:name="Flow Reference"/>
+                <flow-ref name="insertDeskRequest" doc:name="call insertDeskRequest"/>
 
             </batch:step>
 
@@ -56,66 +52,115 @@ if (orgNames != null){
         </batch:on-complete>
     </batch:job>
     <sub-flow name="insertPcRequest" >
-        <expression-component doc:name="Create Service Request"><![CDATA[java.util.Map output = new java.util.HashMap();
-output['approval'] = "Requested";
-output['active'] = true;
-output['assignedTo'] = '${snow.pc.assignedTo}';
-output['location'] = recordVars['isSales'] ? '${snow.locationA}' : '${snow.locationB}';
-output['price'] = new BigDecimal('${snow.pc.price}');
-java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
-output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
-payload = output;]]></expression-component>
-        <enricher source="payload" target="recordVars['pcRequest']" doc:name="store in recordVars['pcRequest']">
-            <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
-        </enricher>
-        <expression-component doc:name="Create Service Request Item"><![CDATA[java.util.Map output = new java.util.HashMap();
-output['active'] = true;
-output['approval'] = "requested";
-output['catItem'] = '${snow.pc.model}';
-//output['approvalSet'] = '${snow.pc.assignedTo}';
-output['request'] = recordVars['pcRequest']['sysId'];
-output['parent'] = recordVars['pcRequest']['sysId'];
-java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
-output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.pc.deliveryDays}) * 86400000));
-output['price'] = ${snow.pc.price};
-payload = output;]]></expression-component>
+        <dw:transform-message doc:name="Create Service Request">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sc_request
+%var pcDeliveryDays = p('snow.pc.deliveryDays')
+%var toPeriod = (days) -> "PT$(24*days)H" as :period
+---
+{
+	ns0#insert: {
+		ns0#active: true,
+		ns0#approval: "Requested",
+		ns0#"assigned_to": p('snow.pc.assignedTo'),
+		ns0#"due_date": (now + toPeriod(pcDeliveryDays)) as :date,
+		ns0#location: p('snow.locationA') when recordVars.isSales otherwise p('snow.locationB'),
+		ns0#price: p('snow.pc.price')
+	}
+}
+
+]]></dw:set-payload>
+        </dw:transform-message>
+        <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
+        <dw:transform-message doc:name="Create Service Request Item">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sc_req_item
+%var pcDeliveryDays = p('snow.pc.deliveryDays')
+%var toPeriod = (days) -> "PT$(24*days)H" as :period
+---
+{
+	ns0#insert: {
+		ns0#active: true,
+		ns0#approval: "Requested",
+		ns0#"assigned_to": p('snow.pc.assignedTo'),
+		ns0#"cat_item": p('snow.pc.model'),
+		ns0#parent: payload.sysId,
+		ns0#request: payload.sysId,
+		ns0#price: p('snow.pc.price'),
+		ns0#estimatedDelivery: (now + toPeriod(pcDeliveryDays)) as :date
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+
         <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
     </sub-flow>
     <sub-flow name="insertDeskRequest" >
-        <expression-component doc:name="Create Service Request"><![CDATA[java.util.Map output = new java.util.HashMap();
-output['approval'] = "Requested";
-output['active'] = true;
-output['assignedTo'] = '${snow.desk.assignedTo}';
-output['location'] = recordVars['isSales'] ? '${snow.locationA}' : '${snow.locationB}';
-output['price'] = new BigDecimal('${snow.desk.price}');
-java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
-output['dueDate'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
-payload = output;]]></expression-component>
-        <enricher source="payload" target="recordVars['deskRequest']" doc:name="store in recordVars['deskRequest']">
-            <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
-        </enricher>
-        <expression-component doc:name="Create Service Request Item"><![CDATA[java.util.Map output = new java.util.HashMap();
-output['active'] = true;
-output['approval'] = "requested";
-output['catItem'] = '${snow.desk.model}';
-output['approvalSet'] = '${snow.desk.assignedTo}';
-output['request'] = recordVars['deskRequest']['sysId'];
-output['parent'] = recordVars['deskRequest']['sysId'];
-java.text.DateFormat df = new java.text.SimpleDateFormat("yyyy-MM-dd");		
-output['estimatedDelivery'] = df.format(new java.util.Date(System.currentTimeMillis() + new java.lang.Integer(${snow.desk.deliveryDays}) * 86400000));
-output['price'] = ${snow.desk.price};
-payload = output;]]></expression-component>
+        <dw:transform-message doc:name="Create Service Request">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sc_request
+%var deskDeliveryDays = p('snow.desk.deliveryDays')
+%var toPeriod = (days) -> "PT$(24*days)H" as :period
+---
+{
+	ns0#insert: {
+		ns0#approval      : "Requested",
+		ns0#active        : true,
+		ns0#"assigned_to" : p('snow.desk.assignedTo'),
+		ns0#location      : p('snow.locationA') when recordVars.isSales otherwise p('snow.locationB'),
+		ns0#price         : p('snow.desk.price'),
+		ns0#dueDate       : (now + toPeriod(deskDeliveryDays)) as :date
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <flow-ref name="insertRequestFlow" doc:name="call insertRequestFlow"/>
+        <dw:transform-message doc:name="Create Service Request Item">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://www.service-now.com/sc_req_item
+%var deskDeliveryDays = p('snow.desk.deliveryDays')
+%var toPeriod = (days) -> "PT$(24*days)H" as :period
+---
+{
+	ns0#insert: {
+		ns0#active: true,
+		ns0#approval: "Requested",
+		ns0#"assigned_to": p('snow.desk.assignedTo'),
+		ns0#"cat_item": p('snow.desk.model'),
+		ns0#parent: payload.sysId,
+		ns0#request: payload.sysId,
+		ns0#price: p('snow.desk.price'),
+		ns0#estimatedDelivery: (now + toPeriod(deskDeliveryDays)) as :date
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+
         <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
     </sub-flow>
     <sub-flow name="insertRequestFlow" >
-        <servicenow:insert config-ref="ServiceNow" type="SC_REQUEST" doc:name="Insert Service Request">
-            <servicenow:insert-request ref="#[payload]"/>
-        </servicenow:insert>
+
+        <servicenow:invoke config-ref="ServiceNow" type="sc_request||insert" doc:name="Insert Service Request"/>
+        <dw:transform-message doc:name="Extract sysId">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+sysId : payload.insertResponse.sys_id]]></dw:set-payload>
+        </dw:transform-message>
+
         <logger message="request: #[payload]" level="INFO" doc:name="Log the insert response"/>
     </sub-flow>
     <sub-flow name="insertItemFlow" >
-        <servicenow:insert config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="Insert Service Request Item"/>
-        <json:object-to-json-transformer doc:name="Convert InsertResponse to JSON"/>
+
+        <servicenow:invoke config-ref="ServiceNow" type="sc_req_item||insert" doc:name="Insert Service Request Item"/>
+        <dw:transform-message doc:name="Extract sysId">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+sysId : payload.insertResponse.sys_id]]></dw:set-payload>
+        </dw:transform-message>
+
         <logger message="request item: #[payload]" level="INFO" doc:name="Log the insert respone"/>
     </sub-flow>
 
