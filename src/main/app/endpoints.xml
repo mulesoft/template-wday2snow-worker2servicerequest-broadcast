@@ -21,7 +21,7 @@ http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd
 		<poll doc:name="fireup Worker synchronization">
 		<fixed-frequency-scheduler frequency="${poll.frequencyMillis}"
 			startDelay="${poll.startDelayMillis}" />
-			<watermark variable="lastQueryDate" default-expression="${watermark.default.expression}" update-expression="#[flowVars.updatedThrough]"/>
+			<watermark variable="lastQueryDate" default-expression="${watermark.default.expression}" />
 			<processor-chain doc:name="query Workers">
 			<logger message="Fetching Workday updates... #[flowVars.lastQueryDate.getTime()]" level="INFO" doc:name="Log 'Fetching workday updates...'"/>
                 <dw:transform-message doc:name="Create Get Workers Request">
@@ -65,12 +65,8 @@ http://www.mulesoft.org/schema/mule/wd-hr http://www.mulesoft.org/schema/mule/wd
                 </dw:transform-message>
 
 			<wd-hr:get-workers config-ref="Workday_Human_Resource" doc:name="Get Workers from Workday Human Resource" />
-			</processor-chain>
-		</poll>
-        <set-variable variableName="updatedThrough" value="#[payload.getRequestCriteria().getTransactionLogCriteriaData().get(0).getTransactionDateRangeData().getUpdatedThrough()]" doc:name="Set updatedThrough"/>
-
-        <dw:transform-message doc:name="GetWorkersResponseType to Map">
-            <dw:set-payload><![CDATA[%dw 1.0
+                <dw:transform-message doc:name="GetWorkersResponseType to Map">
+                    <dw:set-payload><![CDATA[%dw 1.0
 %output application/java
 %var response = payload as :object { class: "com.workday.hr.GetWorkersResponseType" }
 ---
@@ -82,7 +78,14 @@ response.responseData.worker map {
 } unless (response.responseData is :null) otherwise []
 
 ]]></dw:set-payload>
-        </dw:transform-message>
+                    <dw:set-variable variableName="lastQueryDate"><![CDATA[%dw 1.0
+%output application/java
+---
+payload.requestCriteria.transactionLogCriteriaData[0].transactionDateRangeData.updatedThrough]]></dw:set-variable>
+                </dw:transform-message>
+			</processor-chain>
+		</poll>
+
 
         <expression-filter expression="#[payload.size() &gt; 0]" doc:name="Filter empty result set"/>
         <logger message="New Workday workers: #[payload]" level="INFO" doc:name="log worker's name"/>
