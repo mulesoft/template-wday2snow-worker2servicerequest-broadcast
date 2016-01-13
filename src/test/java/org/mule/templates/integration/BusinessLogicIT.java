@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -74,7 +75,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     
     @BeforeClass
     public static void beforeTestClass() {
-        System.setProperty("poll.startDelayMillis", "0");
+        System.setProperty("poll.startDelayMillis", "5000");
         System.setProperty("poll.frequencyMillis", "60000");
         
         final Properties props = new Properties();
@@ -89,13 +90,12 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
     	DESK_ASSIGNED_TO = props.getProperty("snow.desk.assignedTo");
     	PC_MODEL = props.getProperty("snow.pc.model");
     	DESK_MODEL = props.getProperty("snow.desk.model");
-    	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.HOUR_OF_DAY, -2);
-    	startingDate = cal.getTime();
     	
-    	Date initialDate = new Date(System.currentTimeMillis());        
-        cal.setTime(initialDate);
-        System.setProperty(
+    	Calendar cal = Calendar.getInstance();
+    	cal.add(Calendar.MINUTE, -1);
+    	startingDate = cal.getTime();   	
+    	
+    	System.setProperty(
         		"watermark.default.expression", 
         		"#[groovy: new GregorianCalendar("
         				+ cal.get(Calendar.YEAR) + ","
@@ -130,7 +130,8 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		flow.initialise();
 		logger.info("creating a workday employee...");
 		try {
-			flow.process(getTestEvent(prepareNewHire(), MessageExchangePattern.REQUEST_RESPONSE));						
+			flow.process(getTestEvent(prepareNewHire(), MessageExchangePattern.REQUEST_RESPONSE));	
+			logger.info("hire finished");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,7 +141,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		EXT_ID = TEMPLATE_PREFIX + System.currentTimeMillis();
 		logger.info("employee name: " + EXT_ID);
 		employee = new Employee(EXT_ID, "Willis1", EMAIL, "650-232-2323", "999 Main St", "San Francisco", "CA", "94105", "US", "o7aHYfwG", 
-				"2014-04-17-07:00", "2014-04-21-07:00", "QA Engineer", "San_Francisco_site", "Regular", "Full Time", "Salary", "USD", "140000", "Annual", "39905", "21440", EXT_ID);
+				"2015-12-11", "2015-12-11", "QA Engineer", "San_Francisco_site", "Regular", "Full Time", "Salary", "USD", "140000", "Annual", "39905", "21440", EXT_ID);
 		List<Object> list = new ArrayList<Object>();
 		list.add(employee);
 		return list;
@@ -160,6 +161,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 		flow.initialise();
 		Map<String, String> inputMap = new HashMap<String, String>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		logger.info("starting date: " + sdf.format(startingDate));
 		inputMap.put("assignedTo", ">" + DateUtil.applyTimeZone(startingDate, "yyyy-MM-dd HH:mm:ss", "GMT"));
 		
