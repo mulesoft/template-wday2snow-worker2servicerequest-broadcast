@@ -7667,7 +7667,9 @@ output.__id = input.__id;
 output.__parent_id = input.__id;
 //END -> DO NOT REMOVE
 output.type = "Organization_Reference_ID";
-output.value = "SUPERVISORY_ORGANIZATION-6-235";]]></attr>
+output.value = "50006855";
+
+]]></attr>
 </Node>
 <Node enabled="enabled" guiName="HireReasonRef" guiX="460" guiY="1920" id="FOREACH_OBJECT_ID8" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
 <attr name="melScript"><![CDATA[//MEL

@@ -4,7 +4,7 @@
       xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.6.2"
+      
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -108,12 +108,14 @@ payload = output;]]></expression-component>
         <flow-ref name="insertItemFlow" doc:name="call insertItemFlow"/>
     </sub-flow>
     <sub-flow name="insertRequestFlow" >
+
         <servicenow:insert config-ref="ServiceNow" type="SC_REQUEST" doc:name="Insert Service Request">
             <servicenow:insert-request ref="#[payload]"/>
         </servicenow:insert>
         <logger message="request: #[payload]" level="INFO" doc:name="Log the insert response"/>
     </sub-flow>
     <sub-flow name="insertItemFlow" >
+
         <servicenow:insert config-ref="ServiceNow" type="SC_REQ_ITEM" doc:name="Insert Service Request Item"/>
         <json:object-to-json-transformer doc:name="Convert InsertResponse to JSON"/>
         <logger message="request item: #[payload]" level="INFO" doc:name="Log the insert respone"/>

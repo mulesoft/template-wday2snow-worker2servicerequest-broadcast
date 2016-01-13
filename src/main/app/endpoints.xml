@@ -4,7 +4,7 @@
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
 	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.2"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
@@ -32,9 +32,11 @@ http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schem
                 <data-mapper:transform config-ref="GetWorkersResponseType_To_Map" doc:name="GetWorkersResponseType To Map">
                     <data-mapper:input-arguments>
                         <data-mapper:input-argument key="UpdatedThrough">#[payload.getRequestCriteria().getTransactionLogCriteriaData()[0].getTransactionDateRangeData().getUpdatedThrough()]</data-mapper:input-argument>
+
                     </data-mapper:input-arguments>
                     
                 </data-mapper:transform>
+                <logger message="#[payload]" level="INFO" doc:name="Logger"/>
 
 
 			</processor-chain>
