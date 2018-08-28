@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:workday="http://www.mulesoft.org/schema/mule/workday"
+      xmlns:os="http://www.mulesoft.org/schema/mule/os"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+      xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd">
+
+<os:object-store name="watermarkStore" doc:name="Object store" persistent="false"/>
+
+<configuration-properties doc:name="Configuration properties" doc:id="7584fb1d-2fa2-445a-b949-eed01f5785bd" file="common.properties" />
+<configuration-properties doc:name="Configuration properties" doc:id="86e0eb9d-cf2e-451a-9e09-b4afdf13e0e9" file="mule.${mule.env}.properties" />
+<configuration-properties doc:name="Configuration properties" doc:id="0abdf143-d5d1-4168-bdbd-7e3722442725" file="mule-artifact.properties" />
+	<workday:config name="Workday_Config" doc:name="Workday Config" doc:id="113b3d64-1f7d-49db-b3ce-64455f550116" >
+		<workday:basic-connection username="${wday.username}"
+			password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.host}">
+			<workday:transport>
+				<workday:default-http-dispatcher-provider />
+			</workday:transport>
+		</workday:basic-connection>
+	</workday:config>
+
+</mule>
+
+        
