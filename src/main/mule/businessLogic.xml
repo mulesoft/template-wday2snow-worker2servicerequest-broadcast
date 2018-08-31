@@ -168,7 +168,7 @@ var toPeriod = (days) -> "PT$(24*days)H" as Period
             doc:id="0189de41-3267-47b9-adc9-f8221179ee47" name="inserItemFlow" />
     </sub-flow>
     <sub-flow name="insertRequestFlow" doc:id="214ba65d-d18f-4ed1-95f3-1d14ab547b8b">
-        <servicenow:invoke doc:name="Invoke"
+        <servicenow:invoke doc:name="Insert Service Request"
             doc:id="3db07e2a-b0c5-4b7f-ac6f-47a058dd9dc1" config-ref="ServiceNow_Config"
             service="sc_request" operation="insert" />
         <ee:transform doc:name="Extract sysId"
@@ -185,7 +185,7 @@ output application/java
         </ee:transform>
     </sub-flow>
     <sub-flow name="inserItemFlow" doc:id="34cff4f3-0a08-49c0-b597-d7fc6e47d077">
-        <servicenow:invoke doc:name="Invoke"
+        <servicenow:invoke doc:name="Inseret service Request Item"
             doc:id="828e8b0b-a861-4d21-a9ad-9631b8debcbc" config-ref="ServiceNow_Config"
             service="sc_req_item" operation="insert" />
         <ee:transform doc:name="Extract sysId"
