@@ -36,7 +36,7 @@ http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mu
     <servicenow:config name="ServiceNow_Config"
         doc:name="ServiceNow Config" doc:id="2f49c10d-1796-4ea6-bcb2-9f6309775cf7">
         <servicenow:basic-connection
-            serviceNowVersion="JAKARTA" username="${snow.user}"
+            serviceNowVersion="${snow.version}" username="${snow.user}"
             password="${snow.password}" serviceAddress="${snow.endpoint}">
             <servicenow:transport>
                 <servicenow:basic-auth-http-message-dispatcher-provider

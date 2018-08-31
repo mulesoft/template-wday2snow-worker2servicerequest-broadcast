@@ -120,7 +120,7 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 ### Application configuration
 + scheduler.frequency `10000`
 + scheduler.start.delay `500`
-+ watermark.default.expression `#[groovy: new GregorianCalendar(2015, Calendar.OCTOBER, 05, 14, 00, 00)]`
++ watermark.default.expression `2018-08-27T10:08:00Z`
 
 #### WorkDay Connector configuration for company A
 + wday.username `user1`
@@ -133,6 +133,7 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + snow.user `snow_user1`
 + snow.password `ExamplePassword881`
 + snow.endpoint `https://instance.service-now.com`
++ snow.version `JAKARTA`
 
 + snow.pc.assignedTo `1e826bf03710200044e0bfc8bcbe5d9c`
 + snow.desk.assignedTo `1e826bf03710200044e0bfc8bcbe5d9c`
