@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
-      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-      xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
-      xmlns="http://www.mulesoft.org/schema/mule/core"
-      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+    xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+    xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
 
-<flow name="businessLogicFlow" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67" >
-    <batch:job jobName="migrateWorkerservicerequestsBatch" doc:id="204892ae-0d97-4326-beae-310c8d52b7a6">
-        <batch:process-records>
-            <batch:step name="foreachWorkerservicerequestInWorkdayGetWorkerservicerequestInNetsuiteStep" doc:id="89713774-362a-4e92-9bdc-41e31802bf38">
-                <logger level="INFO" doc:name="Query Workerservicerequest in Netsuite" doc:id="3bde4c45-1ce4-4d5f-96f1-d3494609319c" />
-            </batch:step>
-            <batch:step name="foreachWorkerservicerequestInWorkdayUpsertWorkerservicerequestInNetsuiteStep" doc:id="78a74ab4-9b91-416d-985a-acda2ac377eb">
-                <batch:aggregator doc:name="Batch Aggregator" doc:id="1ad86a98-643e-494a-a90a-32daab0b03cc" size="${page.size}">
-                    <logger level="INFO" doc:name="Upsert Workerservicerequests in Netsuite" doc:id="7236a9f6-7aaf-4f40-94e3-e477a132e88d" />
-                </batch:aggregator>
-					<logger level="INFO" doc:name="Logger" doc:id="51e1ad80-b489-47e3-80c5-279bd467be2e" />
-            </batch:step>
+    <flow name="businessLogicFlow" doc:id="8759532e-79b7-4789-990c-dc8e162bfd67">
+        <batch:job jobName="migrateWorkerservicerequestsBatch"
+            doc:id="204892ae-0d97-4326-beae-310c8d52b7a6">
+            <batch:process-records>
+                <batch:step name="foreachWorkerCheckDepartment"
+                    doc:id="89713774-362a-4e92-9bdc-41e31802bf38">
+                    <ee:transform doc:name="Check department"
+                        doc:id="f407bd3e-d3fd-465d-bddb-5885b5abf6a1">
+                        <ee:message>
+                        </ee:message>
+                        <ee:variables>
+                            <ee:set-variable
+                                variableName="isGivenDepartment"><![CDATA[%dw 2.0
+output application/java
+---
+payload.orgNames.*name map ($ contains p('wday.department')) reduce $$ or $]]></ee:set-variable>
+                        </ee:variables>
+                    </ee:transform>
+                </batch:step>
+                <batch:step name="InsertPcRequest"
+                    doc:id="5019190c-4cbf-4bd7-90ad-b105e022266b">
+                    <flow-ref doc:name="call insertPcRequest"
+                        doc:id="ddae4870-25ae-41f9-97e4-5542a3de6313"
+                        name="insertPCRequest" />
+                </batch:step>
+                <batch:step name="InsertDeskRequest"
+                    doc:id="33909bfa-cb26-4583-bbaa-9c9c340c35e4">
+					<flow-ref doc:name="call insertDeskRequest" doc:id="b1b7d05e-7e2e-4188-a589-ebf73353d3cc" name="insertDeskRequest"/>
+				</batch:step>
         </batch:process-records>
-        <batch:on-complete>
-            <ee:transform doc:name="Prepare migration result" doc:id="c84b4bc4-5a65-41c1-9d0c-f1ebd3d8db7a">
-                <ee:message>
-                    <ee:set-payload><![CDATA[%dw 2.0
+            <batch:on-complete>
+                <ee:transform doc:name="Prepare result"
+                    doc:id="c84b4bc4-5a65-41c1-9d0c-f1ebd3d8db7a">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output text/plain
 ---
 "Migration Report: \n"
@@ -37,14 +56,151 @@ output text/plain
 ++ "\n Failed Records: "			++ payload.failedRecords
 ++ "\n Loaded Records: "			++ payload.loadedRecords
 ++ "\n Processed Records: " 		++ payload.processedRecords]]></ee:set-payload>
-                </ee:message>
-            </ee:transform>
-            <logger level="INFO" doc:name="Migration process has finished!" doc:id="b7575d38-7dbd-4602-9186-1bbb25234896" message="Migration process has finished: #[payload]" />
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Process has finished!"
+                    doc:id="b7575d38-7dbd-4602-9186-1bbb25234896"
+                    message="Migration process has finished: #[payload]" />
 
-        </batch:on-complete>
+            </batch:on-complete>
 
-    </batch:job>
-</flow>
+        </batch:job>
+    </flow>
+    <sub-flow name="insertPCRequest" doc:id="a1f536ba-f858-4a4d-a7f1-3c59496fa71a">
+        <ee:transform doc:name="Create Service Request"
+            doc:id="b3fd064c-3bc7-4fde-95fe-2a9884539463">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sc_request
+var pcDeliveryDays = p('snow.pc.deliveryDays')
+var toPeriod = (days) -> "PT$(24*days)H" as Period
+---
+{
+	ns0#insert: {
+		ns0#active: true,
+		ns0#approval: "Requested",
+		ns0#"assigned_to": p('snow.pc.assignedTo'),
+		ns0#dueDate         : (now() + toPeriod(pcDeliveryDays)) as Date,
+		ns0#location: if (vars.isGivenDepartment==true) p('snow.locationA') else p('snow.locationB'),
+		ns0#price: p('snow.pc.price')
+	}
+}
+]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="call insertRequestFlow"
+            doc:id="a0d5db3c-c2b9-428f-9b05-5506215978b6" name="insertRequestFlow" />
+        <ee:transform doc:name="Create Service Request Item"
+            doc:id="cde98fd0-cee1-497e-ae7f-fd86e48a0c26">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sc_req_item
+var pcDeliveryDays = p('snow.pc.deliveryDays')
+var toPeriod = (days) -> "PT$(24*days)H" as Period
+---
+{
+	ns0#insert: {
+		ns0#active: true,
+		ns0#approval: "Requested",
+		ns0#"assigned_to": p('snow.pc.assignedTo'),
+		ns0#"cat_item": p('snow.pc.model'),
+		ns0#parent: payload.sysId,
+		ns0#request: payload.sysId,
+		ns0#price: p('snow.pc.price'),
+		ns0#estimatedDelivery: (now() + toPeriod(pcDeliveryDays)) as Date
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="call insertItemFlow"
+            doc:id="eb6167e2-2938-4184-979d-ec0ad5cb7c16" name="inserItemFlow" />
+    </sub-flow>
+    <sub-flow name="insertDeskRequest" doc:id="1b14d7a9-8ff3-4065-857c-be51adcd79d1">
+        <ee:transform doc:name="Create Service Request"
+            doc:id="12fea20d-f35f-4601-b095-cc1c46844952">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sc_request
+var deskDeliveryDays = p('snow.desk.deliveryDays')
+var toPeriod = (days) -> "PT$(24*days)H" as Period
+---
+{
+	ns0#insert: {
+		ns0#approval      : "Requested",
+		ns0#active        : true,
+		ns0#"assigned_to" : p('snow.desk.assignedTo'),
+		ns0#location: if (vars.isGivenDepartment==true) p('snow.locationA') else p('snow.locationB'),
+		ns0#price         : p('snow.desk.price'),
+		ns0#dueDate       : (now() + toPeriod(deskDeliveryDays)) as Date
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="call insertRequestFlow"
+            doc:id="3f1ba884-f8f4-4ff2-9e0e-a7b944282d02" name="insertRequestFlow" />
+        <ee:transform doc:name="Create Service Request Item"
+            doc:id="023f4dbb-5b89-4119-8d52-060ceeade60e">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/sc_req_item
+var deskDeliveryDays = p('snow.desk.deliveryDays')
+var toPeriod = (days) -> "PT$(24*days)H" as Period
+---
+{
+	ns0#insert: {
+		ns0#active: true,
+		ns0#approval: "Requested",
+		ns0#"assigned_to": p('snow.desk.assignedTo'),
+		ns0#"cat_item": p('snow.desk.model'),
+		ns0#parent: payload.sysId,
+		ns0#request: payload.sysId,
+		ns0#price: p('snow.desk.price'),
+		ns0#estimatedDelivery: (now() + toPeriod(deskDeliveryDays)) as Date
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="call insertItemFlow"
+            doc:id="0189de41-3267-47b9-adc9-f8221179ee47" name="inserItemFlow" />
+    </sub-flow>
+    <sub-flow name="insertRequestFlow" doc:id="214ba65d-d18f-4ed1-95f3-1d14ab547b8b">
+        <servicenow:invoke doc:name="Invoke"
+            doc:id="3db07e2a-b0c5-4b7f-ac6f-47a058dd9dc1" config-ref="ServiceNow_Config"
+            service="sc_request" operation="insert" />
+        <ee:transform doc:name="Extract sysId"
+            doc:id="3ec654c4-44b8-44de-81f9-1473955eacac">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+    sysId : payload.body.insertResponse.sys_id,
+    number : payload.body.insertResponse.number
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </sub-flow>
+    <sub-flow name="inserItemFlow" doc:id="34cff4f3-0a08-49c0-b597-d7fc6e47d077">
+        <servicenow:invoke doc:name="Invoke"
+            doc:id="828e8b0b-a861-4d21-a9ad-9631b8debcbc" config-ref="ServiceNow_Config"
+            service="sc_req_item" operation="insert" />
+        <ee:transform doc:name="Extract sysId"
+            doc:id="242c82b0-4b57-4d46-b200-2bdf9dfe27fb">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+    sysId : payload.body.insertResponse.sys_id,
+    number : payload.body.insertResponse.number
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </sub-flow>
 
 </mule>
 
