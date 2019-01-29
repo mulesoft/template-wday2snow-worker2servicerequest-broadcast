@@ -140,7 +140,6 @@ To use this template, configure properties such as credentials, configurations, 
 - snow.user `snow_user1`
 - snow.password `ExamplePassword881`
 - snow.endpoint `https://instance.service-now.com`
-- snow.version `JAKARTA`
 
 - snow.pc.assignedTo `1e826bf03710200044e0bfc8bcbe5d9c`
 - snow.desk.assignedTo `1e826bf03710200044e0bfc8bcbe5d9c`
