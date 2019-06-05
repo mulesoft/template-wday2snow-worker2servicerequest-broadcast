@@ -7,7 +7,7 @@
 	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
 	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 		http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
@@ -29,7 +29,7 @@ output application/java
 {
 	"assigned_to"   : p('snow.pc.assignedTo'),
 	location        : p('snow.locationA'),
-	price           : p('snow.pc.price')	
+	price           : p('snow.pc.price')
 }]]></ee:set-variable>
 				<ee:set-variable variableName="testPcItem" ><![CDATA[%dw 2.0
 output application/java
@@ -37,7 +37,7 @@ output application/java
 {
 	"assigned_to"   : p('snow.pc.assignedTo'),
 	"cat_item"  	: p('snow.pc.model'),
-	price           : p('snow.pc.price')	
+	price           : p('snow.pc.price')
 }]]></ee:set-variable>
 				<ee:set-variable variableName="testDeskRequest" ><![CDATA[%dw 2.0
 output application/java
@@ -45,7 +45,7 @@ output application/java
 {
 	"assigned_to"   : p('snow.desk.assignedTo'),
 	location        : p('snow.locationA'),
-	price           : p('snow.desk.price')	
+	price           : p('snow.desk.price')
 }]]></ee:set-variable>
 				<ee:set-variable variableName="testDeskItem" ><![CDATA[%dw 2.0
 output application/java
@@ -53,7 +53,7 @@ output application/java
 {
 	"assigned_to"   : p('snow.desk.assignedTo'),
 	"cat_item"  	: p('snow.desk.model'),
-	price           : p('snow.desk.price')	
+	price           : p('snow.desk.price')
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
@@ -61,7 +61,7 @@ output application/java
 	<munit:test name="test-suiteTest" description="MUnit Test"
 		doc:id="d9b99079-7d37-49e0-ab3e-0da59aa105db">
 		<munit:execution>
-			<flow-ref doc:name="queryFlow" doc:id="a3c71b06-712f-4c7f-acf2-382c88762b82" 
+			<flow-ref doc:name="queryFlow" doc:id="a3c71b06-712f-4c7f-acf2-382c88762b82"
 				name="queryFlow"/>
 			<ee:transform doc:name="Filter for only two records" doc:id="8b50aae3-39c7-4551-b2a7-8e7dd1ff896d" >
 				<ee:message >
@@ -72,7 +72,7 @@ output application/java
 				</ee:message>
 			</ee:transform>
 			<set-variable value="#[sizeOf(payload)]" doc:name="Set number of records" doc:id="2805c3be-59a5-4c1d-a5ca-6a8bcb121ccc" variableName="numberOfRecords"/>
-			<flow-ref doc:name="Flow-ref to businessLogicFlow" doc:id="5b5cc264-c6ba-492a-ad9d-fa0fc6d96e14" 
+			<flow-ref doc:name="Flow-ref to businessLogicFlow" doc:id="5b5cc264-c6ba-492a-ad9d-fa0fc6d96e14"
 				name="businessLogicFlow"/>
 			<scripting:execute engine="groovy"
 				doc:name="Sleep for 30s until the processing is completed" doc:id="dfc21f80-b9d3-498c-b102-0c06d47b4da1">
@@ -83,12 +83,12 @@ output application/java
 
 		</munit:execution>
 		<munit:validation>
-			<munit-tools:assert-that doc:name="Check number of PC Requests" doc:id="f577d357-b577-4898-bd85-1f477a91ca40" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfPcRequests)]" />
+			<munit-tools:assert-that doc:name="Check number of PC Requests" doc:id="f577d357-b577-4898-bd85-1f477a91ca40" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfPcRequests)]" message="Check number of PC Requests has failed"/>
 			<munit-tools:assert-that doc:name="Check number of Desk Requests"
 				doc:id="1f41eb48-798e-4fed-9273-86a273bc60a1" expression="#[vars.numberOfRecords]"
-				is="#[MunitTools::equalTo(vars.numberOfDeskRequests)]" />
-			<munit-tools:assert-that doc:name="Check number of PC Items" doc:id="b14b5cb0-4acf-4e51-a63f-4ed527d9d316" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfPcItems)]" />
-			<munit-tools:assert-that doc:name="Check number of Desk Items" doc:id="111c42f2-d175-421f-bd99-df858b294c3b" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfDeskItems)]" />
+				is="#[MunitTools::equalTo(vars.numberOfDeskRequests)]" message="Check number of Desk Requests has failed"/>
+			<munit-tools:assert-that doc:name="Check number of PC Items" doc:id="b14b5cb0-4acf-4e51-a63f-4ed527d9d316" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfPcItems)]" message="Check number of PC Items has failed"/>
+			<munit-tools:assert-that doc:name="Check number of Desk Items" doc:id="111c42f2-d175-421f-bd99-df858b294c3b" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfDeskItems)]" message="Check number of Desk Items has failed"/>
 		</munit:validation>
 	</munit:test>
 
@@ -103,7 +103,7 @@ ns ns0 http://www.service-now.com/sys_user
 	ns0#getRecords: {
 		ns0#"assigned_to"   : vars.testPcRequest.assigned_to,
 		ns0#location        : vars.testPcRequest.location
-	
+
 	}
 }]]></ee:set-payload>
 				</ee:message>
@@ -122,7 +122,7 @@ ns ns0 http://www.service-now.com/sys_user
 	ns0#getRecords: {
 		ns0#"assigned_to"   : vars.testDeskRequest.assigned_to,
 		ns0#location        : vars.testDeskRequest.location
-	
+
 	}
 }]]></ee:set-payload>
 			</ee:message>
@@ -178,7 +178,7 @@ ns ns0 http://www.service-now.com/sys_user
 		<servicenow:invoke service="sc_req_item" operation="getRecords" doc:name="getRecords Desk item" doc:id="92847b11-0ad6-4b65-a0aa-e2d12616ec28" config-ref="ServiceNow_Config" />
 		<set-variable value="#[sizeOf(payload.body.getRecordsResponse)]" doc:name="Number of Desk items" doc:id="a7fecebb-14fb-4b32-96c9-fa39dc811b7b" variableName="numberOfDeskItems" />
 	</sub-flow>
-	
+
 		<munit:after-test name="test-suiteAfter_Test"
 		description="After tests actions" doc:id="0ea109ef-c08d-4999-b196-8a4da978ef3b">
 		<foreach doc:name="For Each" doc:id="07383990-f0f5-46f2-95ac-92e159642546" collection="vars.snowIds">
@@ -199,7 +199,7 @@ ns ns0 http://www.service-now.com/sys_user
 		</ee:transform>
 			<servicenow:invoke service="sc_request" doc:name="Delete snow records" doc:id="b7a2a197-dbd1-4400-989d-75d719a37e47" config-ref="ServiceNow_Config" operation="deleteRecord" />
 		</foreach>
-		
+
 	</munit:after-test>
 
 </mule>

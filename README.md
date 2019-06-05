@@ -1,8 +1,8 @@
 
-# Anypoint Template: Workday Worker to ServiceNow Service Request Broadcast	
+# Anypoint Template: Workday Worker to ServiceNow Service Request Broadcast
 
 <!-- Header (start) -->
-As worker information is added or removed from Workday, you may need to create service requests in ServiceNow. This template lets you broadcast (one way sync) those changes to workers in Workday to service requests in ServiceNow in real time. The detection criteria, and fields to move are configurable. Additional systems can easily added to be notified of changes. Real time synchronization is achieved via rapid polling of Workday or you can slow down the interval to something near real time. 
+As worker information is added or removed from Workday, you may need to create service requests in ServiceNow. This template lets you broadcast (one way sync) those changes to workers in Workday to service requests in ServiceNow in real time. The detection criteria, and fields to move are configurable. Additional systems can easily added to be notified of changes. Real time synchronization is achieved via rapid polling of Workday or you can slow down the interval to something near real time.
 
 ![66a1d790-2819-46e9-8379-8a98316731e4-image.png](https://exchange2-file-upload-service-kprod.s3.us-east-1.amazonaws.com:443/66a1d790-2819-46e9-8379-8a98316731e4-image.png)
 
@@ -15,7 +15,7 @@ Install Workday HCM - Human Resources module, which you can find on the [Workday
 <!-- Header (end) -->
 
 # License Agreement
-This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio. 
+This template is subject to the conditions of the <a href="https://s3.amazonaws.com/templates-examples/AnypointTemplateLicense.pdf">MuleSoft License Agreement</a>. Review the terms of the license before downloading and using this template. You can use this template for free with the Mule Enterprise Edition, CloudHub, or as a trial in Anypoint Studio.
 # Use Case
 <!-- Use Case (start) -->
 When a new employee is hired, create two service requests:
@@ -23,7 +23,7 @@ When a new employee is hired, create two service requests:
 1. Service request for setting up a desk.
 2. Service request for setting up a computer.
 
-If in the department, make the request for building A, if the department is anything else set their seat to building B.	
+If in the department, make the request for building A, if the department is anything else set their seat to building B.
 
 The data is processed as follows:
 
@@ -102,7 +102,7 @@ After you import your template into Anypoint Studio, follow these steps to run i
 <!-- Running on Studio (end) -->
 
 ### Run on Mule Standalone
-Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`. 
+Update the properties in one of the property files, for example in mule.prod.properties, and run your app with a corresponding environment variable. In this example, use `mule.env=prod`.
 
 
 ## Run on CloudHub
@@ -134,6 +134,7 @@ To use this template, configure properties such as credentials, configurations, 
 - wday.password `ExamplePassword565`
 - wday.endpoint `https://services1.workday.com/ccx/service/acme/Human_Resources/v21.1`
 - wday.department `sales`
+- wday.responseTimeout `25000`
 
 #### ServiceNow Connector Configuration for Company B
 
@@ -153,6 +154,7 @@ To use this template, configure properties such as credentials, configurations, 
 
 - snow.desk.deliveryDays `3`
 - snow.desk.price` 500`
+- snow.version `snow_version`
 <!-- Application Configuration (end) -->
 
 # API Calls

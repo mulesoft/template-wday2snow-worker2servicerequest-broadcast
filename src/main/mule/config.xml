@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ns5="http://www.mulesoft.org/schema/mule/servicenow" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
 
     <os:object-store name="watermarkStore" persistent="false" doc:name="Object store" />
 
@@ -7,14 +7,14 @@
     <configuration-properties file="common.properties" doc:id="7584fb1d-2fa2-445a-b949-eed01f5785bd" doc:name="Configuration properties" />
     <configuration-properties file="mule.${mule.env}.properties" doc:id="86e0eb9d-cf2e-451a-9e09-b4afdf13e0e9" doc:name="Configuration properties" />
     <workday:config-version-30-config name="Workday_Config_version_30" doc:name="Workday Config version 30" doc:id="975a09df-566e-41a7-8d21-5f4c3ab051ed" >
-		<workday:basic-authentication-api-v30-connection username="${wday.username}" password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.host}" responseTimeout="25000"/>
+		<workday:basic-authentication-api-v30-connection username="${wday.username}" password="${wday.password}" tenantName="${wday.tenant}" hostName="${wday.host}" responseTimeout="${wday.responseTimeout}"/>
 	</workday:config-version-30-config>
-    <ns5:config name="ServiceNow_Config" doc:id="2f49c10d-1796-4ea6-bcb2-9f6309775cf7" doc:name="ServiceNow Config">
-        <ns5:basic-connection password="${snow.password}" serviceAddress="${snow.endpoint}" serviceNowVersion="JAKARTA" username="${snow.user}">
-            <ns5:transport>
-                <ns5:basic-auth-http-message-dispatcher-provider password="${snow.password}" username="${snow.user}" />
-            </ns5:transport>
-        </ns5:basic-connection>
-    </ns5:config>
+    <servicenow:config name="ServiceNow_Config" doc:id="2f49c10d-1796-4ea6-bcb2-9f6309775cf7" doc:name="ServiceNow Config">
+        <servicenow:basic-connection password="${snow.password}" serviceAddress="${snow.endpoint}" serviceNowVersion="${snow.version}" username="${snow.user}">
+            <servicenow:transport>
+                <servicenow:basic-auth-http-message-dispatcher-provider password="${snow.password}" username="${snow.user}" />
+            </servicenow:transport>
+        </servicenow:basic-connection>
+    </servicenow:config>
 
 </mule>
