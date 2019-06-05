@@ -83,7 +83,7 @@ output application/java
 
 		</munit:execution>
 		<munit:validation>
-			<munit-tools:assert-that doc:name="Check number of PC Requests" doc:id="f577d357-b577-4898-bd85-1f477a91ca40" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfPcRequests)]" message="heck number of PC Requests has failed"/>
+			<munit-tools:assert-that doc:name="Check number of PC Requests" doc:id="f577d357-b577-4898-bd85-1f477a91ca40" expression="#[vars.numberOfRecords]" is="#[MunitTools::equalTo(vars.numberOfPcRequests)]" message="Check number of PC Requests has failed"/>
 			<munit-tools:assert-that doc:name="Check number of Desk Requests"
 				doc:id="1f41eb48-798e-4fed-9273-86a273bc60a1" expression="#[vars.numberOfRecords]"
 				is="#[MunitTools::equalTo(vars.numberOfDeskRequests)]" message="Check number of Desk Requests has failed"/>
