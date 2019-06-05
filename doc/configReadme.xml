@@ -11,21 +11,21 @@
 1. one service request for setting up a desk
 2. one service request for setting up a computer
 
-If in the given department, make the request for Building A, if the department is anything else make their seat building B.	
+If in the given department, make the request for Building A, if the department is anything else make their seat building B.
 
 The data is processed as follows:
 
 1. Workday is polled in intervals for new modifications of employees
 2. Employee data is processed to identify new hires
 3. Service request for a computer is sent to ServiceNow
-4. Service request for a desk is sent to ServiceNow		
-			
+4. Service request for a desk is sent to ServiceNow
+
 		</section>
 		<section id="considerations">
 			There are no special considerations for this template.
 		</section>
 		<section id="application_configuration">
-			
+
 + scheduler.frequency `10000`
 + scheduler.start.delay `500`
 + watermark.default.expression `2018-08-27T10:08:00Z`
@@ -36,6 +36,7 @@ The data is processed as follows:
 + wday.password `ExamplePassword565`
 + wday.endpoint `https://services1.workday.com/ccx/service/acme/Human_Resources/v21.1`
 + wday.department `sales`
++ wday.responseTimeout `25000`
 
 #### ServiceNow Connector configuration for company B
 + snow.user `snow_user1`
@@ -55,19 +56,20 @@ The data is processed as follows:
 
 + snow.desk.deliveryDays `3`
 + snow.desk.price` 500`
-		  
++ snow.version `snow_version`
+
 		</section>
 		<section id="api_calls">
-			There are no special considerations regarding API calls.  
+			There are no special considerations regarding API calls.
 		</section>
 		<section id="endpoints.xml">
-		
+
 This file should contain every inbound endpoint of your integration app. It is intended to contain the application API.
 In this particular template, this file contains a poll inbound endpoints that query Workday for updates using watermark.
 
 		</section>
 		<section id="businesslogic.xml">
-		
+
 This file holds the functional aspect of the template (points 2. to 4. described in the template overview. Its main component is a Batch job, and it includes *steps* for executing the broadcast operation from Workday to ServiceNow.
 
 	</section>
