@@ -134,7 +134,6 @@ To use this template, configure properties such as credentials, configurations, 
 - wday.password `ExamplePassword565`
 - wday.endpoint `https://services1.workday.com/ccx/service/acme/Human_Resources/v21.1`
 - wday.department `sales`
-- wday.responseTimeout `25000`
 
 #### ServiceNow Connector Configuration for Company B
 
