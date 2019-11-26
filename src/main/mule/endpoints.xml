@@ -65,7 +65,7 @@ ns ns0 urn:com.workday/bsvc
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<workday:human-resources operation="Get_Workers" doc:name="Human resources" doc:id="0491179f-77db-4157-87aa-377c7c176634" config-ref="Workday_Config_version_30" />
+		<workday:human-resources operation="Get_Workers" doc:name="Human resources" doc:id="0491179f-77db-4157-87aa-377c7c176634" config-ref="Workday_Config" />
 		<os:store doc:name="Store updatedThrough" doc:id="1fe6830b-0a79-4688-8422-7774d083e5ac" key="watermark" objectStore="watermarkStore">
 			<os:value ><![CDATA[#[vars.updatedThrough]]]></os:value>
 		</os:store>

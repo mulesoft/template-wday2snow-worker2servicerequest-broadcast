@@ -36,7 +36,6 @@ The data is processed as follows:
 + wday.password `ExamplePassword565`
 + wday.endpoint `https://services1.workday.com/ccx/service/acme/Human_Resources/v21.1`
 + wday.department `sales`
-+ wday.responseTimeout `25000`
 
 #### ServiceNow Connector configuration for company B
 + snow.user `snow_user1`
